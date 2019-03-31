@@ -24,5 +24,4 @@ public class PricingServiceRestController {
 		//TODO handle exception better
         return pricingService.getPriceInfoForProduct(productId);
     }
-
 }
