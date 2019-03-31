@@ -2,6 +2,7 @@ package com.myretail.pricingservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,9 +31,9 @@ public class PricingServiceRestController {
 			method = RequestMethod.PUT,
 			consumes = "application/json",
 			produces = "application/json")
-    public void postData(@PathVariable("id") String productId, ProductPricingInfo body)
+    public void postData(@PathVariable("id") String productId, @RequestBody ProductPricingInfo info)
     throws Throwable
 	{
-        pricingService.savePriceForProduct(productId, body);
+        pricingService.savePriceForProduct(productId, info);
     }
 }
