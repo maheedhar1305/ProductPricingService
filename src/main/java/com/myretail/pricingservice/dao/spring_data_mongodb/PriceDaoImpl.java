@@ -1,7 +1,5 @@
 package com.myretail.pricingservice.dao.spring_data_mongodb;
 
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +32,7 @@ public class PriceDaoImpl implements PriceDao {
 		
 		Update update = new Update();
 		update.set("currentPrice", price.getCurrentPrice());
-		update.set("lastModified", new Date());
+		update.set("lastModified", price.getLastModified());
 		update.set("currencyCode", price.getCurrencyCode());
 		
 		UpdateResult result = mongoTemplate.updateFirst(q, update, Price.class);

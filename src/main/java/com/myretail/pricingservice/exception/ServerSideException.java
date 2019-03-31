@@ -1,4 +1,4 @@
-package com.myretail.pricingservice;
+package com.myretail.pricingservice.exception;
 
 import java.io.IOException;
 

@@ -1,8 +1,10 @@
 package com.myretail.pricingservice.service;
 
-import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 
 import org.slf4j.Logger;
@@ -10,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.myretail.pricingservice.ExceptionUtil;
-import com.myretail.pricingservice.InternalServiceException;
 import com.myretail.pricingservice.client.ProductServiceClient;
 import com.myretail.pricingservice.dao.PriceRepository;
 import com.myretail.pricingservice.domain.Description;
@@ -21,6 +21,10 @@ import com.myretail.pricingservice.domain.Price;
 import com.myretail.pricingservice.domain.PricingInfo;
 import com.myretail.pricingservice.domain.Product;
 import com.myretail.pricingservice.domain.ProductPricingInfo;
+import com.myretail.pricingservice.exception.ExceptionUtil;
+import com.myretail.pricingservice.exception.InternalServiceException;
+import com.myretail.pricingservice.exception.ServerSideException;
+import com.rusapi.candigram.domain.Authentication;
 
 @Component
 public class PricingServiceImpl implements PricingService {
@@ -35,7 +39,7 @@ public class PricingServiceImpl implements PricingService {
 
 	@Override
 	public ProductPricingInfo getPriceInfoForProduct(String productId)
-	throws Throwable 
+			throws NotFoundException,ServerSideException,InternalServiceException
 	{
 		try {
 			InventoryInfo info = productServiceClient.getProductInfo(productId);
@@ -61,15 +65,81 @@ public class PricingServiceImpl implements PricingService {
 			
 			return result;
 		}
+		catch (NotFoundException | ServerSideException t) {
+			LOGGER.error("Exception! getPriceInfoForProduct for " + productId + ", reason : "+ ExceptionUtil.stackTraceToString(t));
+			throw t;
+		}
 		catch (Throwable t) {
-			LOGGER.error("Exception! PricingServiceImpl getPriceInfoForProduct for " + productId + ", reason : "+ ExceptionUtil.stackTraceToString(t));
+			LOGGER.error("Exception! getPriceInfoForProduct for " + productId + ", reason : "+ ExceptionUtil.stackTraceToString(t));
 			throw new InternalServiceException(t.getMessage());
 		}
 	}
 
 	@Override
-	public void savePriceForProduct(ProductPricingInfo info) {
-		// TODO validate that there is data in the price field before you put it in
-
+	public void savePriceForProduct(ProductPricingInfo info)
+			throws InternalServiceException, BadRequestException
+	{
+		try {
+			validate(info);
+			
+			Price price = new Price();
+			price.setProductId(info.getId());
+			price.setCurrencyCode(info.getCurrent_price().getCurrency_code());
+			price.setCurrentPrice(info.getCurrent_price().getValue());
+			price.setLastModified(new Date());
+			
+			if (priceRepository.doesProductExists(info.getId())) {
+				priceRepository.updateSalaryInfo(price);
+			} 
+			else {
+				priceRepository.save(price);
+			}
+		}
+		catch (BadRequestException t) {
+			LOGGER.error("Exception! savePriceForProduct for " + info + ", reason : "+ ExceptionUtil.stackTraceToString(t));
+			throw t;
+		}
+		catch (Throwable t) {
+			LOGGER.error("Exception! savePriceForProduct for " + info + ", reason : "+ ExceptionUtil.stackTraceToString(t));
+			throw t;
+		}
+	}
+	
+	private void validate (ProductPricingInfo info) throws BadRequestException
+	{
+		StringBuilder msg = new StringBuilder();
+		if (info == null) {
+			msgAppend(msg, "PricingInfo is missing");
+		}
+		else {
+			if (info.getId() == null || info.getId().trim().isEmpty()) {
+				msgAppend(msg, "Product id is missing");
+			}
+			if (info.getCurrent_price() == null) {
+				msgAppend(msg, "Pricing info is missing");
+			}
+			else {
+				if (info.getCurrent_price().getCurrency_code() == null || info.getCurrent_price().getCurrency_code().trim().isEmpty()) {
+					msgAppend(msg, "Currency code is missing");
+				}
+				if (info.getCurrent_price().getValue() == null) {
+					msgAppend(msg, "Price is missing");
+				} 
+				else if (info.getCurrent_price().getValue() <= 0) {
+					msgAppend(msg, "Price must be greater than zero");
+				}
+			}
+		}
+		if (msg.length() > 0) {
+			msg.insert(0, "One or more of the following issues have been found: ");
+		}
+		if (msg.length() > 0) {
+			throw new BadRequestException(msg.toString());
+		}
+	}
+	
+	private void msgAppend(StringBuilder sb, String msg) {
+		sb.append((sb.length() > 0) ? ", " : "");
+		sb.append(msg);
 	}
 }

@@ -11,7 +11,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
 
-import com.myretail.pricingservice.ServerSideException;
+import com.myretail.pricingservice.exception.ServerSideException;
 
 @Component
 public class RestTemplateResponseErrorHandler 
