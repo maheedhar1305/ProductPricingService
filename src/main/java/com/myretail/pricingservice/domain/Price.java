@@ -1,6 +1,6 @@
 package com.myretail.pricingservice.domain;
 
-import java.util.List;
+import java.util.Date;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -10,11 +10,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Price {
 	private String id;
-	private PricingInfo currentPrice;
-	private List<PricingInfo> priceHistory;
+	private Double currentPrice;
+	private Date lastModified;
+	private String currencyCode;
 	
-	@Indexed
-	private String productId; // create a mongoDB index for the field productId to enable faster searches
+	@Indexed(unique=true)
+	private String productId; // create a unique mongoDB index for the field productId to enable faster searches
 	
 	public String getId() {
 		return id;
@@ -24,20 +25,28 @@ public class Price {
 		this.id = id;
 	}
 
-	public PricingInfo getCurrentPrice() {
+	public Double getCurrentPrice() {
 		return currentPrice;
 	}
-
-	public void setCurrentPrice(PricingInfo currentPrice) {
+	
+	public void setCurrentPrice(Double currentPrice) {
 		this.currentPrice = currentPrice;
 	}
-
-	public List<PricingInfo> getPriceHistory() {
-		return priceHistory;
+	
+	public Date getLastModified() {
+		return lastModified;
 	}
-
-	public void setPriceHistory(List<PricingInfo> priceHistory) {
-		this.priceHistory = priceHistory;
+	
+	public void setLastModified(Date lastModified) {
+		this.lastModified = lastModified;
+	}
+	
+	public String getCurrencyCode() {
+		return currencyCode;
+	}
+	
+	public void setCurrencyCode(String currencyCode) {
+		this.currencyCode = currencyCode;
 	}
 	
 	public String getProductId() {

@@ -16,14 +16,17 @@ dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb'
+	compile group: 'org.springframework.boot', name: 'spring-boot-test-autoconfigure'
 	
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.7'
 	
 	testCompile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.13'
 	testCompile group: 'org.spockframework', name: 'spock-core', version: '1.2-groovy-2.4'
 	testCompile group: 'cglib', name: 'cglib-nodep', version: '3.1'
 	testCompile group: 'org.gebish', name: 'geb-spock', version: '1.1.1'
 	testCompile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
+	testCompile group: 'org.springframework', name: 'spring-test', version: '5.1.5.RELEASE'
 }
 
 test {
