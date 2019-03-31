@@ -20,17 +20,27 @@ public class ProductServiceClientImpl implements ProductServiceClient {
 	
 	@Autowired
 	ProductServiceClientProperties properties;
+	
+	@Autowired
+	RestTemplate restTemplate;
 
 	@Override
-	public InventoryInfo getProductInfo(String productId) {
-		RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
-		InventoryInfo inventoryInfo = restTemplate.getForObject(properties.getUrl(), InventoryInfo.class, productId);
-		
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Inventory information for product " + productId + "is = " + inventoryInfo);
+	public InventoryInfo getProductInfo(String productId)
+	throws Throwable
+	{
+		try {
+			InventoryInfo inventoryInfo = restTemplate.getForObject(properties.getUrl(), InventoryInfo.class, productId);
+			
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Inventory information for product " + productId + "is = " + inventoryInfo);
+			}
+			
+			return inventoryInfo;
+		} 
+		catch (Throwable t) {
+			LOGGER.error("Exception! ProductServiceClientImpl getProductInfo for " + productId + " failed due to : " + t);
+			throw t;
 		}
-		
-		return inventoryInfo;
 	}
 
 }

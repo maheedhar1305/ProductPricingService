@@ -1,39 +1,28 @@
 package com.myretail.pricingservice.domain;
 
-import java.util.Date;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class PricingInfo {
-	private Double currentPrice;
-	private Date lastModified;
-	private String currencyCode;
+	private Double value;
+	private String currency_code;
 	
-	public Double getCurrentPrice() {
-		return currentPrice;
+	public Double getValue() {
+		return value;
 	}
 	
-	public void setCurrentPrice(Double currentPrice) {
-		this.currentPrice = currentPrice;
+	public void setValue(Double value) {
+		this.value = value;
 	}
-	
-	public Date getLastModified() {
-		return lastModified;
+
+	public String getCurrency_code() {
+		return currency_code;
 	}
-	
-	public void setLastModified(Date lastModified) {
-		this.lastModified = lastModified;
+
+	public void setCurrency_code(String currency_code) {
+		this.currency_code = currency_code;
 	}
-	
-	public String getCurrencyCode() {
-		return currencyCode;
-	}
-	
-	public void setCurrencyCode(String currencyCode) {
-		this.currencyCode = currencyCode;
-	}
-	
+
 	@Override
 	public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);

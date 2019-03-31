@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
 
 import com.myretail.pricingservice.properties.ProductServiceClientProperties;
 
@@ -29,6 +30,16 @@ public class RestTemplateConfig {
 	        .setDefaultRequestConfig(config)
 	        .build();
 	      return new HttpComponentsClientHttpRequestFactory(client);
+	}
+	
+	@Bean
+	public RestTemplate createRestTemplate(ClientHttpRequestFactory factory) {
+	    RestTemplate restTemplate = new RestTemplate(factory);
+	    //TODO
+	    //TODO actually the client throws 404 when not found, need to handle all that
+// https://www.baeldung.com/spring-rest-template-error-handling
+//	    restTemplate.setErrorHandler(new RestResponseErrorHandler());
+	    return restTemplate;
 	}
 
 }

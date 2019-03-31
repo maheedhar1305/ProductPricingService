@@ -89,7 +89,7 @@ public class ProductServiceClientTest {
  
     @Test
     public void whenCallingGetUserDetails_thenClientMakesCorrectCall() 
-      throws Exception {
+      throws Throwable {
  
     	InventoryInfo details = this.client.getProductInfo("john");
     	Assert.assertEquals(details.getProduct().getItem().getProduct_description().getTitle(), "product");
