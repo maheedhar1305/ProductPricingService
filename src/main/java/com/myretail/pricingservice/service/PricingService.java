@@ -11,6 +11,6 @@ public interface PricingService {
 	public ProductPricingInfo getPriceInfoForProduct(String productId) 
 			throws NotFoundException,ServerSideException,InternalServiceException;
 	
-	public void savePriceForProduct(ProductPricingInfo info)
+	public void savePriceForProduct(String productId, ProductPricingInfo info)
 			throws InternalServiceException, BadRequestException;
 }

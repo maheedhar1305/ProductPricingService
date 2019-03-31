@@ -20,8 +20,19 @@ public class PricingServiceRestController {
 			method = RequestMethod.GET,
 			produces = "application/json")
 	@ResponseBody
-    public ProductPricingInfo getInfo(@PathVariable("id") String productId) throws Throwable {
-		//TODO handle exception better
+    public ProductPricingInfo getInfo(@PathVariable("id") String productId)
+    throws Throwable
+	{
         return pricingService.getPriceInfoForProduct(productId);
+    }
+	
+	@RequestMapping(value = "products/{id}", 
+			method = RequestMethod.PUT,
+			consumes = "application/json",
+			produces = "application/json")
+    public void postData(@PathVariable("id") String productId, ProductPricingInfo body)
+    throws Throwable
+	{
+        pricingService.savePriceForProduct(productId, body);
     }
 }

@@ -1,7 +1,6 @@
 package com.myretail.pricingservice.service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import javax.ws.rs.BadRequestException;
@@ -24,7 +23,6 @@ import com.myretail.pricingservice.domain.ProductPricingInfo;
 import com.myretail.pricingservice.exception.ExceptionUtil;
 import com.myretail.pricingservice.exception.InternalServiceException;
 import com.myretail.pricingservice.exception.ServerSideException;
-import com.rusapi.candigram.domain.Authentication;
 
 @Component
 public class PricingServiceImpl implements PricingService {
@@ -76,11 +74,11 @@ public class PricingServiceImpl implements PricingService {
 	}
 
 	@Override
-	public void savePriceForProduct(ProductPricingInfo info)
+	public void savePriceForProduct(String productId, ProductPricingInfo info)
 			throws InternalServiceException, BadRequestException
 	{
 		try {
-			validate(info);
+			validate(productId, info);
 			
 			Price price = new Price();
 			price.setProductId(info.getId());
@@ -105,15 +103,23 @@ public class PricingServiceImpl implements PricingService {
 		}
 	}
 	
-	private void validate (ProductPricingInfo info) throws BadRequestException
+	private void validate (String productId, ProductPricingInfo info) throws BadRequestException
 	{
 		StringBuilder msg = new StringBuilder();
 		if (info == null) {
-			msgAppend(msg, "PricingInfo is missing");
+			msgAppend(msg, "input is null");
 		}
 		else {
 			if (info.getId() == null || info.getId().trim().isEmpty()) {
 				msgAppend(msg, "Product id is missing");
+			} else {
+				if (productId == null || productId.trim().isEmpty()) {
+					msgAppend(msg, "Product id is missing in the URL");
+				} else {
+					if (!productId.equals(info.getId())) {
+						msgAppend(msg, "Mismatch in the product ID in URL and JSON body");
+					}
+				}
 			}
 			if (info.getCurrent_price() == null) {
 				msgAppend(msg, "Pricing info is missing");

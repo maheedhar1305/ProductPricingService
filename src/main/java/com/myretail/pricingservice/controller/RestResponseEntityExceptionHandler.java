@@ -12,6 +12,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.myretail.pricingservice.exception.InternalServiceException;
 import com.myretail.pricingservice.exception.ServerSideException;
+
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 
 @ControllerAdvice
@@ -25,18 +27,28 @@ public class RestResponseEntityExceptionHandler
     protected ResponseEntity<Object> handleInternalError(Exception ex, WebRequest request)
     {
     	//LOGGER.error("Exception! PricingServiceImpl getPriceInfoForProduct for " + productId + ", reason : "+ ExceptionUtil.stackTraceToString(t));
-        String bodyOfResponse = "Internal servor error. Problem identifier : ";
+        String bodyOfResponse = "Internal servor error. Problem identifier : " + ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse, 
           new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
     
     @ExceptionHandler(value 
       = { NotFoundException.class })
-    protected ResponseEntity<Object> handleNotFound(Exception ex, WebRequest request)
+    protected ResponseEntity<Object> handleNotFound(NotFoundException ex, WebRequest request)
     {
     	//LOGGER.error("Exception! PricingServiceImpl getPriceInfoForProduct for " + productId + ", reason : "+ ExceptionUtil.stackTraceToString(t));
-    	String bodyOfResponse = "Product not found : ";
+    	String bodyOfResponse = "Product not found : " + ex.getMessage();
     	return handleExceptionInternal(ex, bodyOfResponse, 
     	          new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
+    
+    @ExceptionHandler(value 
+    	      = { BadRequestException.class })
+    	    protected ResponseEntity<Object> handleNotFound(BadRequestException ex, WebRequest request)
+    	    {
+    	    	//LOGGER.error("Exception! PricingServiceImpl getPriceInfoForProduct for " + productId + ", reason : "+ ExceptionUtil.stackTraceToString(t));
+    	    	String bodyOfResponse = "Bad request : " + ex.getMessage();
+    	    	return handleExceptionInternal(ex, bodyOfResponse, 
+    	    	          new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    	    }
 }
