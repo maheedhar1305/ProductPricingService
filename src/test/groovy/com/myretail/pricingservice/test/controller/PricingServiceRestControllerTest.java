@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myretail.pricingservice.controller.PricingServiceRestController;
 import com.myretail.pricingservice.domain.ProductPricingInfo;
 import com.myretail.pricingservice.service.PricingService;
@@ -29,7 +30,7 @@ public class PricingServiceRestControllerTest {
     private PricingService pricingService;
  
     @Test
-    public void givenEmployees_whenGetEmployees_thenReturnJsonArray()
+    public void givenPrice_whenGetPrice_thenReturnJson()
       throws Exception {
          
     	ProductPricingInfo info = new ProductPricingInfo();
@@ -41,5 +42,20 @@ public class PricingServiceRestControllerTest {
           .contentType(MediaType.APPLICATION_JSON))
           .andExpect(status().isOk())
           .andExpect(jsonPath("id", is("abc")));
+    }
+    
+    @Test
+    public void whenPutPrice_thensuccess()
+      throws Exception {
+         
+    	ProductPricingInfo info = new ProductPricingInfo();
+    	info.setId("abc");
+    	
+    	doNothing().when(pricingService).savePriceForProduct("abc", info);
+     
+        mvc.perform(put("/products/abc")
+        		.contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsBytes(info)))
+                .andExpect(status().isOk());
     }
 }

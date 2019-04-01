@@ -31,9 +31,10 @@ public class PricingServiceRestController {
 			method = RequestMethod.PUT,
 			consumes = "application/json",
 			produces = "application/json")
-    public void postData(@PathVariable("id") String productId, @RequestBody ProductPricingInfo info)
+    public String postData(@PathVariable("id") String productId, @RequestBody ProductPricingInfo info)
     throws Throwable
 	{
         pricingService.savePriceForProduct(productId, info);
+		return "Price data added";
     }
 }
