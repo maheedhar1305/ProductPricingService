@@ -1,11 +1,9 @@
 package com.myretail.pricingservice.exception;
 
-import java.io.IOException;
-
 /*
  * Indicates an error in getting the information from an external api
  */
-public class ServerSideException extends IOException{
+public class ServerSideException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	
 	public ServerSideException() {
