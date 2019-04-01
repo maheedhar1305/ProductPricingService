@@ -20,7 +20,7 @@ public class ApiError {
        timestamp = LocalDateTime.now();
    }
 
-   public ApiError(HttpStatus status) {
+   public ApiError(HttpStatus status, String message) {
        this();
        this.setStatus(status);
    }

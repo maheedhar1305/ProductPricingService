@@ -2,7 +2,6 @@ package com.myretail.pricingservice.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,7 +23,7 @@ public class RestResponseEntityExceptionHandler
 	private static final Logger LOGGER = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
  
     @ExceptionHandler(value 
-      = { InternalServiceException.class, ServerSideException.class })
+      = { InternalServiceException.class, ServerSideException.class, Throwable.class })
     protected ResponseEntity<Object> handleInternalError(Exception ex, WebRequest request)
     {
     	String error = "Internal servor error";
@@ -35,8 +34,8 @@ public class RestResponseEntityExceptionHandler
       = { NotFoundException.class })
     protected ResponseEntity<Object> handleNotFound(NotFoundException ex, WebRequest request)
     {
-    	String error = "No matching data found";
-        return buildResponseEntity(new ApiError(HttpStatus.NOT_FOUND, error, ex));
+    	String error = "No matching data found for given parameters";
+        return buildResponseEntity(new ApiError(HttpStatus.NOT_FOUND, error));
     }
     
     @ExceptionHandler(value 
