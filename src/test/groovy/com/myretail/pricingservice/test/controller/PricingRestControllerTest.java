@@ -29,7 +29,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myretail.pricingservice.controller.PricingServiceRestController;
 import com.myretail.pricingservice.controller.RestResponseEntityExceptionHandler;
-import com.myretail.pricingservice.domain.ApiError;
 import com.myretail.pricingservice.domain.ProductPricingInfo;
 import com.myretail.pricingservice.service.PricingService;
 import com.myretail.pricingservice.exception.*;
