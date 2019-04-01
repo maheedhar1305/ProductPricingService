@@ -26,7 +26,7 @@ import com.myretail.pricingservice.exception.ServerSideException;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = { NotFoundException.class, InventoryInfo.class, ServerSideException.class })
 @RestClientTest
-public class RestTemplateResponseErrorHandlerIntegrationTest {
+public class RestTemplateResponseErrorHandlerTest {
  
     @Autowired
     private RestTemplateBuilder builder;

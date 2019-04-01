@@ -22,6 +22,7 @@ dependencies {
 	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.7'
 	compile group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1'
 	compile group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '2.28'
+	compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
 	
 	testCompile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.4.13'
 	testCompile group: 'org.spockframework', name: 'spock-core', version: '1.2-groovy-2.4'
@@ -29,7 +30,8 @@ dependencies {
 	testCompile group: 'org.gebish', name: 'geb-spock', version: '1.1.1'
 	testCompile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.2.0'
 	testCompile group: 'org.springframework', name: 'spring-test', version: '5.1.5.RELEASE'
-	testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+	testCompile group: 'org.mockito', name: 'mockito-core', version: '2.25.1'
+	testCompile group: 'org.hamcrest', name: 'hamcrest-core', version: '2.1'
 }
 
 test {
