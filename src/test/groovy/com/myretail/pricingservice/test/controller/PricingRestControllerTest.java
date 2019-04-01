@@ -6,9 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import static org.mockito.BDDMockito.*;
-import static org.mockito.BDDMockito.BDDStubber.*;
-
-
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 
@@ -49,13 +46,10 @@ public class PricingRestControllerTest {
     private PricingServiceRestController restController;
  
     private JacksonTester<ProductPricingInfo> jsonTester;
-    
-    private JacksonTester<ApiError> errorJsonTester;
  
     @Before
     public void setup() {
         JacksonTester.initFields(this, new ObjectMapper());
-        errorJsonTester.initFields(this, new ObjectMapper());
         mvc = MockMvcBuilders.standaloneSetup(restController)
                 .setControllerAdvice(new RestResponseEntityExceptionHandler())
                 .build();
