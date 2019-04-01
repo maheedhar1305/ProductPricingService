@@ -38,7 +38,7 @@ class PriceDaoSpec extends Specification {
 			mongoTemplate.save price
 		
 		when: "update the current price of the product"
-			priceDao.updateSalaryInfo(new Price(productId : "345",
+			priceDao.updatePriceInfo(new Price(productId : "345",
 								 		currentPrice : 101.01, currencyCode : "USD"))
 			def result = mongoTemplate.findById(price.id, Price.class)
 		

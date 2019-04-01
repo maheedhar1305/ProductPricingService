@@ -11,10 +11,13 @@ import com.myretail.pricingservice.domain.Price
 import com.myretail.pricingservice.domain.PricingInfo
 import com.myretail.pricingservice.domain.Product
 import com.myretail.pricingservice.domain.ProductPricingInfo
+import com.myretail.pricingservice.exception.ServerSideException
+import com.myretail.pricingservice.exception.InternalServiceException
 import com.myretail.pricingservice.service.PricingService
 import com.myretail.pricingservice.service.PricingServiceImpl
 import com.myretail.pricingservice.test.UnitTest
-
+import javax.ws.rs.NotFoundException
+import javax.ws.rs.BadRequestException;
 import spock.lang.Specification
 
 @Category(UnitTest.class)
@@ -45,19 +48,14 @@ class PricingServiceTest extends Specification {
 	def "get pricing details for a product not available in inventory" ()
 	{
 		given :
-			productServiceClient.getProductInfo("abc") >> null
+			productServiceClient.getProductInfo("abc") >> { throw new NotFoundException() }
 			priceRepository.findByProductId("abc") >> new Price(productId : "abc", currentPrice : 101.01, currencyCode : "USD")
 			
 			PricingService service = new PricingServiceImpl(productServiceClient : productServiceClient, priceRepository : priceRepository)
-		when : 
+		when :
 			def result = service.getPriceInfoForProduct("abc");
 		then :
-			result
-			result.current_price
-			result.id == "abc"
-			result.name == null
-			result.current_price.value == 101.01
-			result.current_price.currency_code == "USD"
+			thrown NotFoundException
 	}
 	
 	def "get pricing details for unknown product" ()
@@ -70,7 +68,60 @@ class PricingServiceTest extends Specification {
 		when :
 			def result = service.getPriceInfoForProduct("abc");
 		then :
-			result == null
+			thrown NotFoundException
+	}
+	
+	def "server side error in the external api handled by service" ()
+	{
+		given :
+			productServiceClient.getProductInfo("abc") >> { throw new ServerSideException() }
+			priceRepository.findByProductId("abc") >> null
+			
+			PricingService service = new PricingServiceImpl(productServiceClient : productServiceClient, priceRepository : priceRepository)
+		when :
+			def result = service.getPriceInfoForProduct("abc");
+		then : "The exception is bubbled up to be handled by rest exception error handler"
+			thrown ServerSideException
+	}
+	
+	def "misc internal exception handled by service" ()
+	{
+		given :
+			productServiceClient.getProductInfo("abc") >>  new InventoryInfo()
+			priceRepository.findByProductId("abc") >> { throw new Exception()}
+			
+			PricingService service = new PricingServiceImpl(productServiceClient : productServiceClient, priceRepository : priceRepository)
+		when :
+			def result = service.getPriceInfoForProduct("abc");
+		then : "The exception is bubbled up to be handled by rest exception error handler"
+			thrown InternalServiceException
+	}
+	
+	def "validation tests for the save price details method" () {
+		given :
+			PricingService service = new PricingServiceImpl(productServiceClient : productServiceClient, priceRepository : priceRepository)
+		when :
+			service.savePriceForProduct(input[0], input[1])
+		then :
+			Exception ex = thrown(BadRequestException)
+			ex.message == "One or more of the following issues have been found: " + expectedOutcome[0]
+		where : 
+			 input       																		||         expectedOutcome
+		["hgf", null]																       	    ||         [ "input is null" ]
+	    ["hgf", new ProductPricingInfo(id : "", name : "name",
+				current_price : new PricingInfo(value : 10.09, currency_code : "USD"))]         ||         [ "Product id is missing" ]
+		["", new ProductPricingInfo(id : "hgf", name : "name",
+				current_price : new PricingInfo(value : 10.09, currency_code : "USD"))]         ||         [ "Product id is missing in the URL" ]
+		["d", new ProductPricingInfo(id : "hgf", name : "name",
+				current_price : new PricingInfo(value : 10.09, currency_code : "USD"))]         ||         [ "Mismatch in the product ID in URL and JSON body" ]
+		["hgf", new ProductPricingInfo(id : "hgf", name : "name",
+				current_price : null)]													        ||         [ "Pricing info is missing" ]
+		["hgf", new ProductPricingInfo(id : "hgf", name : "name",
+				current_price : new PricingInfo(value : 10.09, currency_code : null))]          ||         [ "Currency code is missing" ]
+		["hgf", new ProductPricingInfo(id : "hgf", name : "name",
+				current_price : new PricingInfo(value : null, currency_code : "USD"))]          ||         [ "Price is missing" ]
+		["hgf", new ProductPricingInfo(id : "hgf", name : "name",
+				current_price : new PricingInfo(value : -10.09, currency_code : "USD"))]        ||         [ "Price must be greater than zero" ]
 	}
 	
 	def "save price details of a known product" () {
@@ -78,10 +129,10 @@ class PricingServiceTest extends Specification {
 			priceRepository.doesProductExists("hgf") >> true
 			PricingService service = new PricingServiceImpl(productServiceClient : productServiceClient, priceRepository : priceRepository)
 		when :
-			service.savePriceForProduct(new ProductPricingInfo(id : "hgf", name : "name", 
-																	current_price : new PricingInfo(value : 10.09)))
+			service.savePriceForProduct("hgf", new ProductPricingInfo(id : "hgf", name : "name", 
+																	current_price : new PricingInfo(value : 10.09, currency_code : "USD")))
 		then :
-			priceRepository.updateSalaryInfo(_) * 1
+			1 * priceRepository.updatePriceInfo(_)
 	}
 	
 	def "save price details of an unknown product" () {
@@ -89,9 +140,9 @@ class PricingServiceTest extends Specification {
 			priceRepository.doesProductExists("hgf") >> false
 			PricingService service = new PricingServiceImpl(productServiceClient : productServiceClient, priceRepository : priceRepository)
 		when :
-			service.savePriceForProduct(new ProductPricingInfo(id : "hgf", name : "name",
-																	current_price : new PricingInfo(value : 10.09)))
+			service.savePriceForProduct("hgf",new ProductPricingInfo(id : "hgf", name : "name",
+																	current_price : new PricingInfo(value : 10.09, currency_code : "USD")))
 		then :
-			priceRepository.save(_) * 1
+			1 * priceRepository.save(_)
 	}
 }

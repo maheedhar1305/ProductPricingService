@@ -26,7 +26,7 @@ public class PriceDaoImpl implements PriceDao {
 	}
 
 	@Override
-	public void updateSalaryInfo(Price price) {
+	public void updatePriceInfo(Price price) {
 		Criteria cri = Criteria.where("productId").is(price.getProductId());
 		Query q = new Query(cri);
 		

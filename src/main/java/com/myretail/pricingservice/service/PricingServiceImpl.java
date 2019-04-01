@@ -56,8 +56,7 @@ public class PricingServiceImpl implements PricingService {
 									.orElse(null));
 			
 			PricingInfo current_price = new PricingInfo();
-			current_price.setCurrency_code(Optional.ofNullable(price.getCurrencyCode())
-													.orElse("USD"));
+			current_price.setCurrency_code(price.getCurrencyCode());
 			current_price.setValue(price.getCurrentPrice());
 			result.setCurrent_price(current_price);
 			
@@ -87,7 +86,7 @@ public class PricingServiceImpl implements PricingService {
 			price.setLastModified(new Date());
 			
 			if (priceRepository.doesProductExists(info.getId())) {
-				priceRepository.updateSalaryInfo(price);
+				priceRepository.updatePriceInfo(price);
 			} 
 			else {
 				priceRepository.save(price);
