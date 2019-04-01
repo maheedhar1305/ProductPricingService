@@ -1,7 +1,7 @@
 package com.myretail.pricingservice.controller;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.myretail.pricingservice.exception.InternalServiceException;
 import com.myretail.pricingservice.exception.ServerSideException;
+import com.myretail.pricingservice.domain.ApiError;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
@@ -20,35 +21,36 @@ import javax.ws.rs.NotFoundException;
 public class RestResponseEntityExceptionHandler 
   extends ResponseEntityExceptionHandler {
 	
-	//private static final Logger LOGGER = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
  
     @ExceptionHandler(value 
       = { InternalServiceException.class, ServerSideException.class })
     protected ResponseEntity<Object> handleInternalError(Exception ex, WebRequest request)
     {
-    	//LOGGER.error("Exception! PricingServiceImpl getPriceInfoForProduct for " + productId + ", reason : "+ ExceptionUtil.stackTraceToString(t));
-        String bodyOfResponse = "Internal servor error. Problem identifier : " + ex.getMessage();
-        return handleExceptionInternal(ex, bodyOfResponse, 
-          new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+    	String error = "Internal servor error";
+    	return buildResponseEntity(new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, error, ex));
     }
     
     @ExceptionHandler(value 
       = { NotFoundException.class })
     protected ResponseEntity<Object> handleNotFound(NotFoundException ex, WebRequest request)
     {
-    	//LOGGER.error("Exception! PricingServiceImpl getPriceInfoForProduct for " + productId + ", reason : "+ ExceptionUtil.stackTraceToString(t));
-    	String bodyOfResponse = "Product not found : " + ex.getMessage();
-    	return handleExceptionInternal(ex, bodyOfResponse, 
-    	          new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    	String error = "No matching data found";
+        return buildResponseEntity(new ApiError(HttpStatus.NOT_FOUND, error, ex));
     }
     
     @ExceptionHandler(value 
     	      = { BadRequestException.class })
-    	    protected ResponseEntity<Object> handleNotFound(BadRequestException ex, WebRequest request)
-    	    {
-    	    	//LOGGER.error("Exception! PricingServiceImpl getPriceInfoForProduct for " + productId + ", reason : "+ ExceptionUtil.stackTraceToString(t));
-    	    	String bodyOfResponse = "Bad request : " + ex.getMessage();
-    	    	return handleExceptionInternal(ex, bodyOfResponse, 
-    	    	          new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-    	    }
+    protected ResponseEntity<Object> handleNotFound(BadRequestException ex, WebRequest request)
+    {
+    	String error = "Invalid JSON request";
+        return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
+    }
+    
+    private ResponseEntity<Object> buildResponseEntity(ApiError apiError) {
+    	if (LOGGER.isDebugEnabled()) {
+    		LOGGER.debug("API Error : " + apiError);
+    	}
+        return new ResponseEntity<>(apiError, apiError.getStatus());
+    }
 }
