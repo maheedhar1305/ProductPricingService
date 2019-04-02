@@ -4,6 +4,7 @@ import javax.ws.rs.NotFoundException;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -19,7 +20,9 @@ import com.myretail.pricingservice.domain.Item;
 import com.myretail.pricingservice.domain.Product;
 import com.myretail.pricingservice.exception.ServerSideException;
 import com.myretail.pricingservice.properties.ProductServiceClientProperties;
+import com.myretail.pricingservice.test.UnitTest;
 
+@Category(UnitTest.class)
 @RunWith(MockitoJUnitRunner.class)
 public class ProductServiceClientImplTest {
  

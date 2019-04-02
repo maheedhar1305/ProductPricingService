@@ -14,6 +14,7 @@ import static org.hamcrest.CoreMatchers.is;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -31,8 +32,10 @@ import com.myretail.pricingservice.controller.PricingServiceRestController;
 import com.myretail.pricingservice.controller.RestResponseEntityExceptionHandler;
 import com.myretail.pricingservice.domain.ProductPricingInfo;
 import com.myretail.pricingservice.service.PricingService;
+import com.myretail.pricingservice.test.UnitTest;
 import com.myretail.pricingservice.exception.*;
 
+@Category(UnitTest.class)
 @RunWith(MockitoJUnitRunner.class)
 public class PricingRestControllerTest {
  

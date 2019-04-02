@@ -5,6 +5,7 @@ import javax.ws.rs.NotFoundException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
@@ -21,7 +22,9 @@ import org.springframework.web.client.RestTemplate;
 import com.myretail.pricingservice.client.RestTemplateResponseErrorHandler;
 import com.myretail.pricingservice.domain.InventoryInfo;
 import com.myretail.pricingservice.exception.ServerSideException;
+import com.myretail.pricingservice.test.UnitTest;
 
+@Category(UnitTest.class)
 @RunWith(SpringRunner.class)
 @RestClientTest
 public class RestTemplateResponseErrorHandlerTest {
