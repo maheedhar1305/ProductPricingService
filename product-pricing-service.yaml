@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-pricing-service
+  labels:
+    name: product-pricing
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    name: product-pricing-deployment
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: product-pricing-deployment
+  labels:
+    name: product-pricing
+spec:
+  selector:
+    matchLabels:
+      name: product-pricing-deployment
+  template:
+    metadata:
+      labels:
+        name: product-pricing-deployment
+    spec:
+      containers:
+      - name: product-pricing-deployment-container
+        image: container.registry/myRetail/product-pricing-service:1.0.0
+        ports:
+        - name: ds-port
+          containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /pricing/actuator/health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /pricing/actuator/health
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 15
+        resources:
+          requests:
+            cpu: 250m
+            memory: 0.75Gi
+          limits:
+            cpu: 250m
+            memory: 0.75Gi
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: product-pricing-hpa
+  labels:
+    name: product-pricing
+spec:
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 90
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: 70
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: product-pricing-deployment

@@ -17,6 +17,7 @@ dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb'
 	compile group: 'org.springframework.boot', name: 'spring-boot-test-autoconfigure'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
 	
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
 	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.7'
