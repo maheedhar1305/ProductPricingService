@@ -1,4 +1,4 @@
-package com.myretail.pricingservice.dao.spring_data_mongodb;
+package com.myretail.pricingservice.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import com.mongodb.client.result.UpdateResult;
-import com.myretail.pricingservice.dao.PriceDao;
 import com.myretail.pricingservice.domain.Price;
 
 @Component

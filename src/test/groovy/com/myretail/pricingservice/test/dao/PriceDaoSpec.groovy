@@ -3,8 +3,8 @@ package com.myretail.pricingservice.test.dao
 import org.junit.experimental.categories.Category
 import org.springframework.data.mongodb.core.MongoTemplate
 import com.myretail.pricingservice.dao.PriceDao
+import com.myretail.pricingservice.dao.PriceDaoImpl
 import com.myretail.pricingservice.dao.PriceRepository
-import com.myretail.pricingservice.dao.spring_data_mongodb.PriceDaoImpl
 import com.myretail.pricingservice.domain.Price
 import com.myretail.pricingservice.domain.PricingInfo
 import com.myretail.pricingservice.test.UnitTest
