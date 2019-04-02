@@ -11,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
@@ -24,7 +23,6 @@ import com.myretail.pricingservice.domain.InventoryInfo;
 import com.myretail.pricingservice.exception.ServerSideException;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = { NotFoundException.class, InventoryInfo.class, ServerSideException.class })
 @RestClientTest
 public class RestTemplateResponseErrorHandlerTest {
  

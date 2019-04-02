@@ -1,4 +1,4 @@
-package com.myretail.pricingservice;
+package com.myretail.pricingservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
