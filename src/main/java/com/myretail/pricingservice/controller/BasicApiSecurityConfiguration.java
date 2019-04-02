@@ -35,8 +35,8 @@ public class BasicApiSecurityConfiguration extends WebSecurityConfigurerAdapter 
     	http
         .csrf().disable()
         .authorizeRequests()
-        .antMatchers(HttpMethod.GET, "/products/{id}").permitAll()
-        .antMatchers(HttpMethod.PUT, "/products/{id}").hasRole("ADMIN")
+        .antMatchers(HttpMethod.GET, "v1/products/{id}").permitAll()
+        .antMatchers(HttpMethod.PUT, "v1/products/{id}").hasRole("ADMIN")
         .and()
         .httpBasic();
     	

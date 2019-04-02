@@ -17,7 +17,7 @@ public class PricingServiceRestController {
 	@Autowired
 	private PricingService pricingService;
 	
-	@RequestMapping(value = "products/{id}", 
+	@RequestMapping(value = "v1/products/{id}", 
 			method = RequestMethod.GET,
 			produces = "application/json")
 	@ResponseBody
@@ -27,7 +27,7 @@ public class PricingServiceRestController {
         return pricingService.getPriceInfoForProduct(productId);
     }
 	
-	@RequestMapping(value = "products/{id}", 
+	@RequestMapping(value = "v1/products/{id}", 
 			method = RequestMethod.PUT,
 			consumes = "application/json",
 			produces = "application/json")

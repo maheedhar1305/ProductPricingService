@@ -63,7 +63,7 @@ public class PricingRestControllerTest {
     	given(pricingService.getPriceInfoForProduct("abc")).willReturn(info);
  
         // when
-        MockHttpServletResponse response =  mvc.perform(get("/products/abc")
+        MockHttpServletResponse response =  mvc.perform(get("/v1/products/abc")
 								                .contentType(MediaType.APPLICATION_JSON))
 								                .andReturn().getResponse();
  
@@ -78,7 +78,7 @@ public class PricingRestControllerTest {
          
     	given(pricingService.getPriceInfoForProduct("abc")).willThrow(new NotFoundException());
     	
-    	MockHttpServletResponse response =  mvc.perform(get("/products/abc")
+    	MockHttpServletResponse response =  mvc.perform(get("/v1/products/abc")
 								                .contentType(MediaType.APPLICATION_JSON))
 								                .andReturn().getResponse();
         
@@ -91,7 +91,7 @@ public class PricingRestControllerTest {
          
     	given(pricingService.getPriceInfoForProduct("abc")).willThrow(new ServerSideException());
     	
-    	MockHttpServletResponse response =  mvc.perform(get("/products/abc")
+    	MockHttpServletResponse response =  mvc.perform(get("/v1/products/abc")
 								                .contentType(MediaType.APPLICATION_JSON))
 								                .andReturn().getResponse();
         
@@ -104,7 +104,7 @@ public class PricingRestControllerTest {
          
     	given(pricingService.getPriceInfoForProduct("abc")).willThrow(new InternalServiceException());
     	
-    	MockHttpServletResponse response =  mvc.perform(get("/products/abc")
+    	MockHttpServletResponse response =  mvc.perform(get("/v1/products/abc")
 								                .contentType(MediaType.APPLICATION_JSON))
 								                .andReturn().getResponse();
         
@@ -118,7 +118,7 @@ public class PricingRestControllerTest {
     	ProductPricingInfo info = new ProductPricingInfo();
     	info.setId("abc");
     	
-    	mvc.perform(put("/products/abc")
+    	mvc.perform(put("/v1/products/abc")
         		.contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsBytes(info)))
                 .andExpect(status().isOk());
@@ -135,7 +135,7 @@ public class PricingRestControllerTest {
 		    	.when(pricingService)
 		    	.savePriceForProduct(eq("abc"), Mockito.any(ProductPricingInfo.class));
     	
-    	MockHttpServletResponse response =  mvc.perform(put("/products/abc")
+    	MockHttpServletResponse response =  mvc.perform(put("/v1/products/abc")
 								                .contentType(MediaType.APPLICATION_JSON)
     											.content(new ObjectMapper().writeValueAsBytes(info)))
 								                .andReturn().getResponse();
@@ -154,7 +154,7 @@ public class PricingRestControllerTest {
 		    	.when(pricingService)
 		    	.savePriceForProduct(eq("abc"), Mockito.any(ProductPricingInfo.class));
     	
-    	MockHttpServletResponse response =  mvc.perform(put("/products/abc")
+    	MockHttpServletResponse response =  mvc.perform(put("/v1/products/abc")
 								                .contentType(MediaType.APPLICATION_JSON)
     											.content(new ObjectMapper().writeValueAsBytes(info)))
 								                .andReturn().getResponse();
