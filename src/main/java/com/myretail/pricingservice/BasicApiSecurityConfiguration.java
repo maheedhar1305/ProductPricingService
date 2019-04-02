@@ -1,5 +1,6 @@
 package com.myretail.pricingservice;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,17 +11,22 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.myretail.pricingservice.properties.AuthProperties;
+
 @Configuration
 @EnableWebSecurity
 public class BasicApiSecurityConfiguration extends WebSecurityConfigurerAdapter {
+	
+	@Autowired
+	AuthProperties authProperties;
 	 
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
       throws Exception {
         auth
           .inMemoryAuthentication()
-          .withUser("admin")
-            .password(encoder().encode("admin"))
+          .withUser(authProperties.getAdminName())
+            .password(encoder().encode(authProperties.getAdminPwd()))
             .roles("ADMIN");
     }
  
