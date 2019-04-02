@@ -3,7 +3,7 @@ FROM openjdk:8-jre
 WORKDIR /app
 
 COPY ./build/libs/ProductPricingService.jar .
-COPY ./deployment/entrypoint.sh .
+COPY ./entrypoint.sh .
 
 RUN ["chmod", "+x", "./entrypoint.sh"]
 
