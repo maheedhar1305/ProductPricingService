@@ -31,6 +31,9 @@ spec:
       containers:
       - name: product-pricing-deployment-container
         image: maheeedhar1010/product-pricing-service:1.0.0
+        envFrom:
+        - configMapRef:
+            name: product-config
         ports:
         - name: ds-port
           containerPort: 8080
