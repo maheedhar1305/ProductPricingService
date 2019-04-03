@@ -42,7 +42,7 @@ $ docker pull maheeedhar1010/product-pricing-service:1.0.0
 ```
 2. Once the image has been downloaded to your machine, you can start the application in a Docker container using the following command. We need to pass the `MONGO_CONNECTION_URI`, `ADMIN_NAME`, `ADMIN_PWD` arguments for the application as described in the [pre-requisites](#10-pre-requisites) section. The application will be started as a daemon
 ```sh
-docker run -d -p 8080:8080 \
+$ docker run -d -p 8080:8080 \
 -e MONGO_CONNECTION_URI="mongodb://price:password@192.168.1.13:27017/pricing" \
 -e ADMIN_NAME="admin" \
 -e ADMIN_PWD="adminPwd"  \
@@ -52,7 +52,22 @@ maheeedhar1010/product-pricing-serice:1.0.0
 
 ### 1.3 Using Kubernetes
 
-The Kubernetes option is the most **Prodution-Ready** option of all the 3 options mentioned here as it comes with many enterprise level features such as Horizontal scaling
+The Kubernetes option is the most **Prodution-Ready** option of all the 3 options mentioned, as it comes with many enterprise standard features such as **Horizontal scaling**, **high availability** etc;. Please refer to this [section](#21-kubernetes) for a more deeper dive into the features of Kubernetes, that I have leveraged for this application.
+
+1. Edit the [product-config.yaml](https://github.com/maheedhar1305/ProductPricingService/blob/develop/product-config.yaml) file to configure the parameters mentioned in the [pre-requisites](#10-pre-requisites) section.
+2. Deploy the configuration to a kubernetes cluster
+```sh
+$ kubectl create -f product-config.yaml
+```
+3. Deploy the application to the kubernetes cluster using the kubernetes descriptor [product-pricing-service.yaml](https://github.com/maheedhar1305/ProductPricingService/blob/develop/product-pricing-service.yaml) file. 
+```sh
+$ kubectl create -f product-pricing-service.yaml
+```
+4. In order to allow traffic into the service, you will have to configure a kubernetes ingress file, the scope of which is beyond our context. But for *testing purposes*, we can use the following command to port forward to the service and confirm that the application is running using the [Healthcheck API](#Healthcheck-API)
+
+```sh
+$ kubectl port-forward svc/product-pricing-service 8080:8080
+```
 
 ## 2. Features
 ### 2.0 Healthcheck API
@@ -67,3 +82,4 @@ Once the application is running, you should see the following status :
 ```sh
 {"status":"UP"}
 ```
+### 2.1 Kubernetes
