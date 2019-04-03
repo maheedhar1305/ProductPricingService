@@ -19,6 +19,7 @@ metadata:
   labels:
     name: product-pricing
 spec:
+  replicas: 2
   selector:
     matchLabels:
       name: product-pricing-deployment
@@ -29,7 +30,7 @@ spec:
     spec:
       containers:
       - name: product-pricing-deployment-container
-        image: container.registry/myRetail/product-pricing-service:1.0.0
+        image: maheeedhar1010/product-pricing-service:1.0.0
         ports:
         - name: ds-port
           containerPort: 8080
@@ -66,7 +67,7 @@ spec:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: 90
+      targetAverageUtilization: 70
   - type: Resource
     resource:
       name: memory

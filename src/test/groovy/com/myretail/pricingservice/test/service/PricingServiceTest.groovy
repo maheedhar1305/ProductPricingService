@@ -14,11 +14,11 @@ import com.myretail.pricingservice.domain.ProductPricingInfo
 import com.myretail.pricingservice.exception.ExternalCommsException
 import com.myretail.pricingservice.exception.EntityNotFoundException
 import com.myretail.pricingservice.exception.InternalServiceException
+import com.myretail.pricingservice.exception.InvalidDataException
 import com.myretail.pricingservice.service.PricingService
 import com.myretail.pricingservice.service.PricingServiceImpl
 import com.myretail.pricingservice.test.UnitTest
 import javax.ws.rs.NotFoundException
-import javax.ws.rs.BadRequestException;
 import spock.lang.Specification
 
 /*
@@ -107,7 +107,7 @@ class PricingServiceTest extends Specification {
 		when :
 			service.savePriceForProduct(input[0], input[1])
 		then :
-			Exception ex = thrown(BadRequestException)
+			Exception ex = thrown(InvalidDataException)
 			ex.message == "One or more of the following issues have been found: " + expectedOutcome[0]
 		where : 
 			 input       																		||         expectedOutcome
