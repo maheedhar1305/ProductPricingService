@@ -40,7 +40,7 @@ $ java -jar build/libs/ProductPricingService.jar
 ```sh
 $ docker pull maheeedhar1010/product-pricing-service:1.0.0
 ```
-2. Once the image has been downloaded to your machine, you can start the application in a Docker container using the following command. We need to pass the `MONGO_CONNECTION_URI`, `ADMIN_NAME`, `ADMIN_PWD` arguments for the application as described in the pre-requisites section. The application will be started as a daemon
+2. Once the image has been downloaded to your machine, you can start the application in a Docker container using the following command. We need to pass the `MONGO_CONNECTION_URI`, `ADMIN_NAME`, `ADMIN_PWD` arguments for the application as described in the [pre-requisites](#10-pre-requisites) section. The application will be started as a daemon
 ```sh
 docker run -d -p 8080:8080 \
 -e MONGO_CONNECTION_URI="mongodb://price:password@192.168.1.13:27017/pricing" \
@@ -48,7 +48,7 @@ docker run -d -p 8080:8080 \
 -e ADMIN_PWD="adminPwd"  \
 maheeedhar1010/product-pricing-serice:1.0.0
 ```
-3. Use the [Healthcheck API](#2.0-Healthcheck-API) to verify that the application is up.
+3. Use the [Healthcheck API](#20-healthcheck-api) to verify that the application is up.
 
 ### 1.3 Using Kubernetes
 
