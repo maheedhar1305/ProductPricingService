@@ -14,6 +14,9 @@ import org.springframework.web.client.RestTemplate;
 
 import com.myretail.pricingservice.properties.ProductServiceClientProperties;
 
+/*
+ * Defines configuration required for clients consuming external API
+ */
 @Configuration
 public class RestTemplateConfig {
 	
@@ -23,17 +26,24 @@ public class RestTemplateConfig {
 	@Autowired
 	RestTemplateResponseErrorHandler restTemplateResponseErrorHandler;
 	
+	/*
+	 * Define a custom ClientHttpRequestFactory that ensures that the external communications have proper timeouts configured 
+	 * And also ensures that clients are closed after communication is complete
+	 * Helps avoid hung threads during communication and also ensure we release network connections
+	 */
 	@Bean
 	public ClientHttpRequestFactory getClientHttpRequestFactory() {
 	      RequestConfig config = RequestConfig.custom()
-	        .setConnectTimeout(properties.getTimeout())
-	        .setConnectionRequestTimeout(properties.getTimeout())
-	        .setSocketTimeout(properties.getTimeout())
-	        .build();
+			        .setConnectTimeout(properties.getTimeout())
+			        .setConnectionRequestTimeout(properties.getTimeout())
+			        .setSocketTimeout(properties.getTimeout())
+			        .build();
+	      
 	      CloseableHttpClient client = HttpClientBuilder
-	        .create()
-	        .setDefaultRequestConfig(config)
-	        .build();
+			        .create()
+			        .setDefaultRequestConfig(config)
+			        .build();
+	      
 	      return new HttpComponentsClientHttpRequestFactory(client);
 	}
 	

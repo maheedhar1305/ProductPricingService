@@ -3,7 +3,6 @@ package com.myretail.pricingservice.service;
 import java.util.Date;
 import java.util.Optional;
 
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 
 import org.slf4j.Logger;
@@ -20,10 +19,15 @@ import com.myretail.pricingservice.domain.Price;
 import com.myretail.pricingservice.domain.PricingInfo;
 import com.myretail.pricingservice.domain.Product;
 import com.myretail.pricingservice.domain.ProductPricingInfo;
+import com.myretail.pricingservice.exception.EntityNotFoundException;
 import com.myretail.pricingservice.exception.ExceptionUtil;
 import com.myretail.pricingservice.exception.InternalServiceException;
-import com.myretail.pricingservice.exception.ServerSideException;
+import com.myretail.pricingservice.exception.InvalidDataException;
+import com.myretail.pricingservice.exception.ExternalCommsException;
 
+/*
+ * Implementation of the PricingService definition
+ */
 @Component
 public class PricingServiceImpl implements PricingService {
 	
@@ -35,16 +39,25 @@ public class PricingServiceImpl implements PricingService {
 	@Autowired
 	private ProductServiceClient productServiceClient;
 
+	/*
+	 * The service that provides information about a product's name and price
+	 * Aggregates data from an external API and also an internal data store to acquire all the information
+	 * @param productId the id of the product whose information to retrieve
+	 * @return ProductPricingInfo if valid information is available in the multiple sources of data
+	 * @throws EntityNotFoundException if data is unavailable in any of the sources
+	 * @throws ExternalCommsException if there were issues in communicating with the external source
+	 * @throws InternalServiceException if there were any issues in processing the request by the service.
+	 */
 	@Override
 	public ProductPricingInfo getPriceInfoForProduct(String productId)
-			throws NotFoundException,ServerSideException,InternalServiceException
+			throws EntityNotFoundException,ExternalCommsException,InternalServiceException
 	{
 		try {
 			InventoryInfo info = productServiceClient.getProductInfo(productId);
 			Price price = priceRepository.findByProductId(productId);
 			
-			// Throw a NotFoundException if mongo has no data for the product
-			Optional.ofNullable(price).orElseThrow(NotFoundException::new);
+			// Throw a EntityNotFoundException if mongo has no data for the product
+			Optional.ofNullable(price).orElseThrow(() -> new EntityNotFoundException("Entity does not exist in the internal database"));
 			
 			ProductPricingInfo result = new ProductPricingInfo();
 			result.setId(productId);
@@ -62,19 +75,30 @@ public class PricingServiceImpl implements PricingService {
 			
 			return result;
 		}
-		catch (NotFoundException | ServerSideException t) {
+		catch (NotFoundException | EntityNotFoundException t) {
+			LOGGER.error("Exception! getPriceInfoForProduct for " + productId + ", reason : "+ ExceptionUtil.stackTraceToString(t));
+			throw new EntityNotFoundException("No product/price information found for id : "+ productId);
+		}
+		catch (ExternalCommsException t) {
 			LOGGER.error("Exception! getPriceInfoForProduct for " + productId + ", reason : "+ ExceptionUtil.stackTraceToString(t));
 			throw t;
 		}
 		catch (Throwable t) {
 			LOGGER.error("Exception! getPriceInfoForProduct for " + productId + ", reason : "+ ExceptionUtil.stackTraceToString(t));
-			throw new InternalServiceException(t.getMessage());
+			throw new InternalServiceException(t.getMessage(), t);
 		}
 	}
 
+	/*
+	 * The service that upserts (insert/update) information about a product's price
+	 * Creates a new record if the product is new, Updates an existing record if a record for the product is already available
+	 * @param ProductPricingInfo the price information for a product to be persisted to the database
+	 * @throws InvalidDataException if the data provided to the service was invalid
+	 * @throws InternalServiceException if there were any issues in processing the request by the service.
+	 */
 	@Override
 	public void savePriceForProduct(String productId, ProductPricingInfo info)
-			throws InternalServiceException, BadRequestException
+			throws InternalServiceException, InvalidDataException
 	{
 		try {
 			validate(productId, info);
@@ -92,17 +116,22 @@ public class PricingServiceImpl implements PricingService {
 				priceRepository.save(price);
 			}
 		}
-		catch (BadRequestException t) {
+		catch (InvalidDataException t) {
 			LOGGER.error("Exception! savePriceForProduct for " + info + ", reason : "+ ExceptionUtil.stackTraceToString(t));
 			throw t;
 		}
 		catch (Throwable t) {
 			LOGGER.error("Exception! savePriceForProduct for " + info + ", reason : "+ ExceptionUtil.stackTraceToString(t));
-			throw t;
+			throw new InternalServiceException(t.getMessage(), t);
 		}
 	}
 	
-	private void validate (String productId, ProductPricingInfo info) throws BadRequestException
+	/*
+	 * Validate the data sent to the service for persistence
+	 * @param The product id (entity identifier)
+	 * @param ProductPricingInfo the price information for a product to be persisted to the database
+	 */
+	private void validate (String productId, ProductPricingInfo info) throws InvalidDataException
 	{
 		StringBuilder msg = new StringBuilder();
 		if (info == null) {
@@ -139,7 +168,7 @@ public class PricingServiceImpl implements PricingService {
 			msg.insert(0, "One or more of the following issues have been found: ");
 		}
 		if (msg.length() > 0) {
-			throw new BadRequestException(msg.toString());
+			throw new InvalidDataException(msg.toString());
 		}
 	}
 	

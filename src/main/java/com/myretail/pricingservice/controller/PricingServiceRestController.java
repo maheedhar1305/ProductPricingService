@@ -11,12 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.myretail.pricingservice.domain.ProductPricingInfo;
 import com.myretail.pricingservice.service.PricingService;
 
+/*
+ * The rest controller defining the API endpoints
+ */
 @RestController
 public class PricingServiceRestController {
 	
 	@Autowired
 	private PricingService pricingService;
 	
+	/*
+	 *  The GET /pricing/v1/products/{id} API, that retrieves product information
+	 */
 	@RequestMapping(value = "v1/products/{id}", 
 			method = RequestMethod.GET,
 			produces = "application/json")
@@ -27,6 +33,9 @@ public class PricingServiceRestController {
         return pricingService.getPriceInfoForProduct(productId);
     }
 	
+	/*
+	 *  The PUT /pricing/v1/products/{id} API, that updates product information
+	 */
 	@RequestMapping(value = "v1/products/{id}", 
 			method = RequestMethod.PUT,
 			consumes = "application/json",

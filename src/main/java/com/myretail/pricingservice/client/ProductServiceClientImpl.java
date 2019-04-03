@@ -9,6 +9,9 @@ import org.springframework.web.client.RestTemplate;
 import com.myretail.pricingservice.domain.InventoryInfo;
 import com.myretail.pricingservice.properties.ProductServiceClientProperties;
 
+/*
+ * Implementation of ProductServiceClient, that consumes an external endpoint hosted at redsky.target.com
+ */
 @Component
 public class ProductServiceClientImpl implements ProductServiceClient {
 	
@@ -17,9 +20,17 @@ public class ProductServiceClientImpl implements ProductServiceClient {
 	@Autowired
 	ProductServiceClientProperties properties;
 	
+	/*
+	 * Custom template (dependency) defined in RestTemplateConfig.java will be injected into this bean
+	 */
 	@Autowired
 	RestTemplate restTemplate;
 
+	/*
+	 * Retrieve the product information from the external api
+	 * @param productId the id of the product whose information to retrieve
+	 * @return InventoryInfo information about the product
+	 */
 	@Override
 	public InventoryInfo getProductInfo(String productId)
 	{	

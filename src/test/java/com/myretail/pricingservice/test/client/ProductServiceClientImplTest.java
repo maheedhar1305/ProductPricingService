@@ -1,7 +1,5 @@
 package com.myretail.pricingservice.test.client;
 
-import javax.ws.rs.NotFoundException;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -18,10 +16,15 @@ import com.myretail.pricingservice.domain.Description;
 import com.myretail.pricingservice.domain.InventoryInfo;
 import com.myretail.pricingservice.domain.Item;
 import com.myretail.pricingservice.domain.Product;
-import com.myretail.pricingservice.exception.ServerSideException;
+import com.myretail.pricingservice.exception.ExternalCommsException;
+import com.myretail.pricingservice.exception.EntityNotFoundException;
 import com.myretail.pricingservice.properties.ProductServiceClientProperties;
 import com.myretail.pricingservice.test.UnitTest;
 
+/*
+ * Happy path testing of the client consuming external API.
+ * The testing of error handler is in the RestTemplateResponseErrorHandlerTest.java file
+ */
 @Category(UnitTest.class)
 @RunWith(MockitoJUnitRunner.class)
 public class ProductServiceClientImplTest {
@@ -36,7 +39,9 @@ public class ProductServiceClientImplTest {
     private ProductServiceClient productServiceClient = new ProductServiceClientImpl();
     
     @Test
-    public void givenMockingIsDoneByMockito_whenGetIsCalled_shouldReturnMockedObject() throws NotFoundException, ServerSideException {
+    public void givenMockExternalServer_whenClientToExternalApiIsCalled_shouldReturnMockedObject() throws EntityNotFoundException, ExternalCommsException {
+    	// given
+    	// mocked object
     	InventoryInfo inventoryInfo = new InventoryInfo();
     	Product product = new Product();
     	Item item = new Item();
@@ -51,11 +56,15 @@ public class ProductServiceClientImplTest {
     	
     	Mockito.when(properties.getUrl()).thenReturn(url);
     	
+    	// mock server that returns the mocked object when called
         Mockito
           .when(restTemplate.getForObject(url ,InventoryInfo.class, "john"))
           .thenReturn(inventoryInfo);
 	 
+        // when 
         InventoryInfo details = this.productServiceClient.getProductInfo("john");
+        
+        // then
     	Assert.assertEquals(details.getProduct().getItem().getProduct_description().getTitle(), "product");
     }
 }

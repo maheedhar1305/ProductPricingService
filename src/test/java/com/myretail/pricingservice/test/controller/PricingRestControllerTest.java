@@ -6,8 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import static org.mockito.BDDMockito.*;
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.NotFoundException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -35,6 +33,9 @@ import com.myretail.pricingservice.service.PricingService;
 import com.myretail.pricingservice.test.UnitTest;
 import com.myretail.pricingservice.exception.*;
 
+/*
+ * Unit test suite for the Rest controller and exception handling
+ */
 @Category(UnitTest.class)
 @RunWith(MockitoJUnitRunner.class)
 public class PricingRestControllerTest {
@@ -53,7 +54,7 @@ public class PricingRestControllerTest {
     public void setup() {
         JacksonTester.initFields(this, new ObjectMapper());
         mvc = MockMvcBuilders.standaloneSetup(restController)
-                .setControllerAdvice(new RestResponseEntityExceptionHandler())
+                .setControllerAdvice(new RestResponseEntityExceptionHandler()) // use the custom exception handler during testing to test its behavior
                 .build();
     }
  
@@ -79,7 +80,7 @@ public class PricingRestControllerTest {
     public void whenResourceNotFound_get404()
       throws Exception {
          
-    	given(pricingService.getPriceInfoForProduct("abc")).willThrow(new NotFoundException());
+    	given(pricingService.getPriceInfoForProduct("abc")).willThrow(new EntityNotFoundException());
     	
     	MockHttpServletResponse response =  mvc.perform(get("/v1/products/abc")
 								                .contentType(MediaType.APPLICATION_JSON))
@@ -92,7 +93,7 @@ public class PricingRestControllerTest {
     public void whenServerSideException_get500()
       throws Exception {
          
-    	given(pricingService.getPriceInfoForProduct("abc")).willThrow(new ServerSideException());
+    	given(pricingService.getPriceInfoForProduct("abc")).willThrow(new ExternalCommsException());
     	
     	MockHttpServletResponse response =  mvc.perform(get("/v1/products/abc")
 								                .contentType(MediaType.APPLICATION_JSON))
@@ -134,7 +135,7 @@ public class PricingRestControllerTest {
     	ProductPricingInfo info = new ProductPricingInfo();
     	info.setId("abc");
          
-    	doThrow(BadRequestException.class)
+    	doThrow(InvalidDataException.class)
 		    	.when(pricingService)
 		    	.savePriceForProduct(eq("abc"), Mockito.any(ProductPricingInfo.class));
     	

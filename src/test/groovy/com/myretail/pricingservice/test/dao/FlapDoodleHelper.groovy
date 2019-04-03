@@ -13,10 +13,16 @@ import de.flapdoodle.embed.mongo.config.Net
 import de.flapdoodle.embed.mongo.distribution.Version
 import de.flapdoodle.embed.process.runtime.Network
 
+/*
+ * Spins up an inmemory lightweight mongoDB to be used for running unit tests in the PriceDaoSpec class
+ */
 class FlapDoodleHelper {
 	
 	private static MongodExecutable mongodExecutable
 	
+	/*
+	 * Will be setup before any unit test is run
+	 */
 	static def setup() {
 		def ip = "localhost"
 		def randomPort = SocketUtils.findAvailableTcpPort()
@@ -33,6 +39,9 @@ class FlapDoodleHelper {
 		return mongoTemplate
 	}
 	
+	/*
+	 * Will be cleaned up after the test suite completes running
+	 */
 	static def cleanup()
 	{
 		mongodExecutable.stop()

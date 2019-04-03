@@ -5,6 +5,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/*
+ * Data structure to support the response from an external source
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Item {
 	private Description product_description;

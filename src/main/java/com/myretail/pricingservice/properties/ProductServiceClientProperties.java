@@ -5,6 +5,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+/*
+ * Property file with external api config information
+ */
 @Configuration
 @ConfigurationProperties(prefix="httpclient")
 public class ProductServiceClientProperties {

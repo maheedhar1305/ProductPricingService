@@ -11,7 +11,8 @@ import com.myretail.pricingservice.domain.Price
 import com.myretail.pricingservice.domain.PricingInfo
 import com.myretail.pricingservice.domain.Product
 import com.myretail.pricingservice.domain.ProductPricingInfo
-import com.myretail.pricingservice.exception.ServerSideException
+import com.myretail.pricingservice.exception.ExternalCommsException
+import com.myretail.pricingservice.exception.EntityNotFoundException
 import com.myretail.pricingservice.exception.InternalServiceException
 import com.myretail.pricingservice.service.PricingService
 import com.myretail.pricingservice.service.PricingServiceImpl
@@ -20,6 +21,9 @@ import javax.ws.rs.NotFoundException
 import javax.ws.rs.BadRequestException;
 import spock.lang.Specification
 
+/*
+ * Testing the PricingService
+ */
 @Category(UnitTest.class)
 class PricingServiceTest extends Specification {
 	PriceRepository priceRepository = Mock(PriceRepository)
@@ -55,10 +59,10 @@ class PricingServiceTest extends Specification {
 		when :
 			def result = service.getPriceInfoForProduct("abc");
 		then :
-			thrown NotFoundException
+			thrown EntityNotFoundException
 	}
 	
-	def "get pricing details for unknown product" ()
+	def "get pricing details for a product not available in mongo" ()
 	{
 		given :
 			productServiceClient.getProductInfo("abc") >> new InventoryInfo()
@@ -68,20 +72,20 @@ class PricingServiceTest extends Specification {
 		when :
 			def result = service.getPriceInfoForProduct("abc");
 		then :
-			thrown NotFoundException
+			thrown EntityNotFoundException
 	}
 	
 	def "server side error in the external api handled by service" ()
 	{
 		given :
-			productServiceClient.getProductInfo("abc") >> { throw new ServerSideException() }
+			productServiceClient.getProductInfo("abc") >> { throw new ExternalCommsException() }
 			priceRepository.findByProductId("abc") >> null
 			
 			PricingService service = new PricingServiceImpl(productServiceClient : productServiceClient, priceRepository : priceRepository)
 		when :
 			def result = service.getPriceInfoForProduct("abc");
 		then : "The exception is bubbled up to be handled by rest exception error handler"
-			thrown ServerSideException
+			thrown ExternalCommsException
 	}
 	
 	def "misc internal exception handled by service" ()

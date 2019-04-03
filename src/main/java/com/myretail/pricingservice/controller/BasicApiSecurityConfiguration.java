@@ -13,13 +13,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.myretail.pricingservice.properties.AuthProperties;
 
+/*
+ * Imposing security on the rest API
+ */
 @Configuration
 @EnableWebSecurity
 public class BasicApiSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	AuthProperties authProperties;
-	 
+	
+	/*
+	 * Create an admin user/password combo
+	 */
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
       throws Exception {
@@ -30,6 +36,10 @@ public class BasicApiSecurityConfiguration extends WebSecurityConfigurerAdapter 
             .roles("ADMIN");
     }
  
+    /*
+     * Any entity can access the GET API to consume information. 
+     * Only entities that are authorized to do so (via ADMIN access), and have the credentials can update information.
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
     	http

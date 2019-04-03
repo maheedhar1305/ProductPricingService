@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+/*
+ * A data-type to help provide meaningful error messages to the consumer of the API
+ */
 public class ApiError {
    private HttpStatus status;
 	  

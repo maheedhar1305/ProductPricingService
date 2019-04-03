@@ -1,9 +1,9 @@
 package com.myretail.pricingservice.exception;
 
 /*
- * Exception thrown by this pricing service
+ * Exception indicating an internal issue in this service
  */
-public class InternalServiceException extends Exception {
+public class InternalServiceException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	
 	public InternalServiceException() {
@@ -13,4 +13,8 @@ public class InternalServiceException extends Exception {
 	public InternalServiceException(String message) {
 		super(message);
 	}
+	
+	public InternalServiceException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

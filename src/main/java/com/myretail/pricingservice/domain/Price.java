@@ -7,6 +7,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+/*
+ * Data structure that defines the schema for the data stored in mongo
+ */
 @Document
 public class Price {
 	private String id;

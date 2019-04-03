@@ -21,9 +21,13 @@ import org.springframework.web.client.RestTemplate;
 
 import com.myretail.pricingservice.client.RestTemplateResponseErrorHandler;
 import com.myretail.pricingservice.domain.InventoryInfo;
-import com.myretail.pricingservice.exception.ServerSideException;
+import com.myretail.pricingservice.exception.ExternalCommsException;
 import com.myretail.pricingservice.test.UnitTest;
 
+/*
+ * Test suite for the RestTemplateResponseErrorHandler.java which is the configuration to handle exceptions when
+ * consuming the external API
+ */
 @Category(UnitTest.class)
 @RunWith(SpringRunner.class)
 @RestClientTest
@@ -59,7 +63,7 @@ public class RestTemplateResponseErrorHandlerTest {
         this.server.verify();
     }
     
-    @Test(expected = ServerSideException.class)
+    @Test(expected = ExternalCommsException.class)
     public void  givenRemoteApiCall_when500Error_thenThrowServerSideException() {
         Assert.assertNotNull(this.builder);
         Assert.assertNotNull(this.server);
@@ -73,7 +77,7 @@ public class RestTemplateResponseErrorHandlerTest {
         this.server.verify();
     }
     
-    @Test(expected = ServerSideException.class)
+    @Test(expected = ExternalCommsException.class)
     public void  givenRemoteApiCall_when400xError_thenThrowServerSideException() {
         Assert.assertNotNull(this.builder);
         Assert.assertNotNull(this.server);

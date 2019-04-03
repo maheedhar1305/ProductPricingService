@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import com.mongodb.client.result.UpdateResult;
 import com.myretail.pricingservice.domain.Price;
 
+/*
+ * PriceDao Implementation specific to MongoDB, uses spring-data-mongoDB.
+ */
 @Component
 public class PriceDaoImpl implements PriceDao {
 	
@@ -24,6 +27,10 @@ public class PriceDaoImpl implements PriceDao {
 		this.mongoTemplate = mongoTemplate;
 	}
 
+    /*
+     * Updates a record in mongo
+     * @param price has the new data
+     */
 	@Override
 	public void updatePriceInfo(Price price) {
 		Criteria cri = Criteria.where("productId").is(price.getProductId());
@@ -41,6 +48,10 @@ public class PriceDaoImpl implements PriceDao {
 		}
 	}
 
+	/*
+     * Check if a record identified by a given id, exists in mongo
+     * @param productId is a unique id of the record in mongo
+     */
 	@Override
 	public Boolean doesProductExists(String productId) {
 		Criteria cri = Criteria.where("productId").is(productId);

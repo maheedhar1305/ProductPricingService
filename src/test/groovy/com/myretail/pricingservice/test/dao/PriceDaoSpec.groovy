@@ -12,6 +12,9 @@ import com.myretail.pricingservice.test.UnitTest
 import spock.lang.Shared
 import spock.lang.Specification
 
+/*
+ * Testing the PriceDao interface
+ */
 @Category(UnitTest.class)
 class PriceDaoSpec extends Specification {
 
@@ -21,11 +24,17 @@ class PriceDaoSpec extends Specification {
 	@Shared
 	PriceDao priceDao
 	
+	/*
+	 * Will be setup before any unit test is run
+	 */
 	def setupSpec() {
 		mongoTemplate = FlapDoodleHelper.setup()
 		priceDao = new PriceDaoImpl(mongoTemplate)
 	}
 	
+	/*
+	 * Will be cleaned up after the test suite completes running
+	 */
 	def cleanupSpec()
 	{
 		FlapDoodleHelper.cleanup()
@@ -55,7 +64,7 @@ class PriceDaoSpec extends Specification {
 		then:
 			result == expectedOutcome[0]
 			
-		where:
+		where: "test both positive and negative cases"
 			 input       ||         expectedOutcome
 		   ["345"]       ||         [ Boolean.TRUE ]
 		   ["2341243"]   ||         [ Boolean.FALSE ]

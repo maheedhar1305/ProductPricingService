@@ -3,6 +3,9 @@ package com.myretail.pricingservice.domain;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/*
+ * Schema supported by our service's API for GET/PUT methods
+ */
 public class ProductPricingInfo {
 	private String id;
 	private String name;
