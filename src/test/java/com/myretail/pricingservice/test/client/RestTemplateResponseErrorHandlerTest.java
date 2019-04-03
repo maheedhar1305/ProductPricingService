@@ -49,6 +49,11 @@ public class RestTemplateResponseErrorHandlerTest {
     	server = MockRestServiceServer.createServer(restTemplate);
     }
  
+    /*
+     * The @Test annotation here says, what exception should be expected from the custom RestTemplateResponseErrorHandler
+     * When a certain HTTP response is got from the server
+     * For example, when server throws a 404, we verify that our custom error handler responds with a NotFoundException
+     */
     @Test(expected = NotFoundException.class)
     public void  givenRemoteApiCall_when404Error_thenThrowNotFound() {
         Assert.assertNotNull(this.builder);
@@ -63,6 +68,9 @@ public class RestTemplateResponseErrorHandlerTest {
         this.server.verify();
     }
     
+    /*
+     * When the mock server returns any 500x error, our custom error handler responds with a ExternalCommsException
+     */
     @Test(expected = ExternalCommsException.class)
     public void  givenRemoteApiCall_when500Error_thenThrowServerSideException() {
         Assert.assertNotNull(this.builder);
@@ -77,6 +85,9 @@ public class RestTemplateResponseErrorHandlerTest {
         this.server.verify();
     }
     
+    /*
+     * When the mock server returns any 400x error (except 404), our custom error handler responds with a ExternalCommsException
+     */
     @Test(expected = ExternalCommsException.class)
     public void  givenRemoteApiCall_when400xError_thenThrowServerSideException() {
         Assert.assertNotNull(this.builder);
