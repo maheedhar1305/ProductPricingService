@@ -1,6 +1,8 @@
 # myRetail RESTful service 
 
-myRetail RESTful service is a Spring Boot application written in Java. 
+myRetail RESTful service is a Spring Boot application written in Java. It is a RESTful service that can retrieve product and price details by ID. Authorized clients can also publish price information to the application. 
+
+Please refer to the [API documentation](#3-api-specification) for detailed specification of the application's API.
 
 ## 1. Quickstart
 
@@ -87,6 +89,52 @@ Please refer to the [API documentation](#3-api-specification) for more detailed 
 
 ### 2.1 Kubernetes
 
-![Kubernetes resources deployed for the application](/extras/assets/documentation/k8sResources.png "Kubernetes resources")
+Here are some brief pointers about the resources defined in the application's [kubernetes descriptor file](https://github.com/maheedhar1305/ProductPricingService/blob/develop/product-pricing-service.yaml), and the significance of their role in a production environment
+
+**Deployment** 
+- The Application runs inside a kubernetes deployment named "product-service-deployment". The Deployment will be a cluster of 3 pods servicing the Traffic.
+- By defining deployments for our application container, we get features such as *High availability, Efficient resource usage, Load balancing*
+
+**Service**
+- Exposes our deployment to outside world. This is to be configured with the load balancer in order to allow traffic to flow in to the application.
+
+**ConfigMap**
+- We can configure the properties mentioned in the [pre-requisites](#10-pre-requisites) section.
+
+**HorizontalPodAutoscaler**
+- Makes our application scalable
+- Monitors the resource usage of our application and when it crosses the average threshold, spins up more replicas to distribute the load and service requests faster without causing disruption. 
+
+Here is a brief description of how the resources would look like when deployed in a kubernetes cluster :
+
+![Kubernetes resources deployed for the application](/extras/assets/documentation/k8sResources.png)
+
+### 2.2 Unit test suite
+
+The Unit test suite encompasses testing every module of the application. In addition, It has also been configured to run every time `gradle build` is ran. It has been configured in a way that a build will take place only if all the tests run successfully. This is useful when we want to configure a *CI/CD pipleine* or a procedure to automate build everytime new code is checked in.
+
+This application uses the following frameworks for unit testing
+- *Spock (Groovy)* - To test business logic in services and DAO
+- *Mockito and Spring-test* - To test spring components
+
+![Unit test suite](/extras/assets/documentation/unittest.png)
+
+### 2.3 Meaningful API error messages
+
+It is important that when there is a failure in the application, we communicate the reason for failure in such a manner that clients can use to troubleshoot and fix the issues on their end. To this effect, the application has a robust and extendable error handling mechanism in place which will handle any failures in the application and accurately convey the reason for failure to the client. 
+
+Here are a few examples :
+
+- When the PUT method fails due to some validation error, the Error message accurately conveys the list of validation errors for the client to fix. *(left)*
+- When the GET method failed to fetch an entity, it describes what is missing. *(right)*
+
+![example-1](/extras/assets/documentation/putError.png) ![example-2](/extras/assets/documentation/getError.png)
+
+### 2.4 Mongo index
+### 2.5 Secure API
 
 ## 3. API Specification
+
+## TO-DO
+### Performance testing
+### CI/CD pipeline
