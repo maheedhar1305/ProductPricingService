@@ -6,7 +6,7 @@ Please refer to the [API documentation](#3-api-specification) for detailed speci
 
 ## 1. Quickstart
 
- There are 3 *options* to quickly access and use the application. They are :
+ There are 3 *options* to quickly access and use the application. They are:
   - Download the source code and build the binary. (Using **Gradle**)
   - Download and run, a publicly available Docker image. (Using **Docker**)
   - Use the Kubernetes script to deploy the application to a cluster. (Using a **Kubernetes** solution of your choice, such as Google Kubernetes Engine)
@@ -20,11 +20,11 @@ In order to successfully run the application, the following configuration is req
 ### 1.1 Using Gradle
 Using Gradle you can build the JAR file from the source code and run the executable in an environment of your choice.
 
-Steps to run using Gradle
+Steps to run using Gradle:
 
 1. Download the source code.
 2. In a CLI of your choice, navigate to the base directory of the source code. This is the folder with the `build.gradle` file in it.
-3. Run ` gradle build`. This builds the JAR file in the path : `<source_directory>/build/libs/`.
+3. Run ` gradle build`. This builds the JAR file in the path : `<source_directory>/build/libs/`
 4. Use the environment variable `MONGO_CONNECTION_URI` to set the mongo connection URI to be used by the application. [Here](https://docs.mongodb.com/manual/reference/connection-string/) are the instructions on how to define a mongo URI. 
 5. Use the environment variables `ADMIN_NAME` and `ADMIN_PWD` to set the username and password of your choice. These credentials need to be used by all client applications who want to publish data to the application. (via the PUT command)
 Example :
@@ -40,9 +40,9 @@ $ java -jar build/libs/ProductPricingService.jar
 
 ### 1.2 Using Docker
 
-Steps to run using Docker
+Steps to run using Docker:x
 
-1. A Docker image has been created for the latest stable version of the application. This *publicly available* image can be found [here](https://cloud.docker.com/u/maheeedhar1010/repository/docker/maheeedhar1010/product-pricing-service). You can use docker tool to pull the image on to your environment.
+1. A Docker image has been created for the latest stable version of the application. This *publicly available* image can be found [here](https://cloud.docker.com/u/maheeedhar1010/repository/docker/maheeedhar1010/product-pricing-service). You can use docker to pull the image to your environment.
 ```sh
 $ docker pull maheeedhar1010/product-pricing-service:1.0.0
 ```
@@ -60,7 +60,7 @@ maheeedhar1010/product-pricing-serice:1.0.0
 
 The Kubernetes option is the most **Prodution-Ready** option of all the 3 options discussed here, as it is accompanied by many enterprise standard features such as **Horizontal scaling**, **high availability**. Please refer to [this section](#22-kubernetes) for a deep dive into the features of Kubernetes, that has been leveraged for this application.
 
-Steps to run using Kubernetes
+Steps to run using Kubernetes:
 
 1. Edit the [product-config.yaml](/product-config.yaml) file to configure the parameters mentioned in the [pre-requisites](#pre-requisites) section.
 2. Deploy the configuration to a kubernetes cluster.
@@ -109,7 +109,7 @@ Here are some brief pointers about the resources defined in the application's [k
 
 **HorizontalPodAutoscaler**
 - Makes our application scalable.
-- Monitors the resource usage of our application and when it crosses the average threshold, spins up more replicas to distribute the load and service requests faster without causing disruption. 
+- Monitors the resource usage of our application and when it crosses the target threshold, spins up more replicas to distribute the load and service requests faster without causing disruption. 
 
 Here is a brief description of how the resources would look like when deployed in a kubernetes cluster :
 
@@ -132,7 +132,7 @@ This application uses the following frameworks for unit testing
 
 Here are a few examples :
 
-When the PUT method fails due to some validation error, the Error message accurately conveys the list of validation errors for the client to fix          |  When the GET method failed to fetch an entity, it describes what is missing
+When the PUT method fails due to some validation error, the error message accurately conveys the list of validation errors for the client to fix          |  When the GET method failed to fetch an entity, it describes what is missing
 :-------------------------:|:-------------------------:
 ![example-1](/extras/assets/documentation/putError.png)  |  ![example-2](/extras/assets/documentation/getError.png)
 
@@ -155,20 +155,21 @@ Unauthorized requests fail with a HTTP 401 status  |  Authorized requests update
 ## 3. API Specification
 
 The application uses OpenAPI 3.0 Specification to describe its API. [Reference](/openapi.yaml)
+**NOTE** The application runs on the base context path `pricing` . Sample URL `/pricing/v1/products/{id}`.
 
 GET   |  PUT
 :-------------------------:|:-------------------------:
 ![unauth](/extras/assets/documentation/getApi.png)  |  ![auth](/extras/assets/documentation/putApi.png)
-## 4. TODO
+## 4. Future improvements
 ### Performance testing
-It is always recommended to do performance testing in order to estimate the limits of the system. It will also help us identify performance bottlenecks if any and address them effectively.
+It is always recommended to do performance testing in order to estimate the limits of the system. It will also help us identify the performance bottlenecks if any and address them effectively.
 ### CI/CD pipeline
-The application basically has all the tools built in to implement a CICP pipeline. Such an implementation would :
+The application basically has all the tools built in to implement a CICP pipeline. Such an implementation would:
 - Run the [Unit test suite](#23-unit-test-suite).
 - If success, use [Gradle](#11-using-gradle) to build JAR.
 - Create a [Docker image](#12-using-docker) with the newly built JAR. Tag the image with a new version.
 - Deploy the latest version of the application to [Kubernetes](#13-using-kubernetes).
 ### Robust API security
-Have a more robust security mechanism for clients trying to publish data to our API. Protocols such as OAuth can be used to provide a more extensible solution.
-### Fine tune kubernetes resource requests/limits
-The Goal of Kubernetes is to efficiently use resources and not under utilize them. Having taken a conservative approach in providing a 1CPU ~4GB machine to run the application in kubernetes initially, we need to tune the requests based on average load over a period of time. This way we can ensure the cluster is sized sufficiently to satisfy average load and whenever there is a peak, it can horizontally scale up for a brief amount of time. 
+Establish a more robust security mechanism for clients trying to publish data to our API. Protocols such as OAuth 2.0 can be used to provide a more extensible security solution.
+### Optimize kubernetes resource requests/limits
+The Goal of Kubernetes is to efficiently use resources and not under utilize them. Having taken a conservative approach in providing a 1CPU ~4GB machine to run the application in kubernetes initially, we need to tune the resource requests based on average load over a period of time. This way we can ensure the cluster is sized sufficiently to satisfy average load and whenever there is a peak, it can horizontally scale up for a brief amount of time. 
