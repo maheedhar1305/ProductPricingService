@@ -1,4 +1,4 @@
-# myRetail RESTful service 
+# myRetail RESTful service
 
 myRetail RESTful service is a Spring Boot application written in Java. It is a RESTful service that can retrieve product details and price by ID. Authorized clients can also publish price information to the application. 
 
