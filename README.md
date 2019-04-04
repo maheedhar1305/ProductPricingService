@@ -63,7 +63,7 @@ $ kubectl create -f product-config.yaml
 ```sh
 $ kubectl create -f product-pricing-service.yaml
 ```
-4. In order to allow traffic into the service, you will have to configure a kubernetes ingress file, the scope of which is beyond our context. But for *testing purposes*, we can use the following command to port forward to the service and confirm that the application is running using the [Healthcheck API](#Healthcheck-API)
+4. In order to allow traffic into the service, you will have to configure a kubernetes ingress file, the scope of which is beyond our context. But for *testing purposes*, we can use the following command to port forward to the service and confirm that the application is running using the [Healthcheck API](#20-healthcheck-api)
 
 ```sh
 $ kubectl port-forward svc/product-pricing-service 8080:8080
@@ -82,4 +82,11 @@ Once the application is running, you should see the following status :
 ```sh
 {"status":"UP"}
 ```
+
+Please refer to the [API documentation](#3-api-specification) for more detailed specification of the application's API.
+
 ### 2.1 Kubernetes
+
+![Kubernetes resources deployed for the application](/extras/assets/documentation/k8sResources.png "Kubernetes resources")
+
+## 3. API Specification
