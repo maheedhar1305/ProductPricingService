@@ -155,5 +155,14 @@ GET   |  PUT
 ![unauth](/extras/assets/documentation/getApi.png)  |  ![auth](/extras/assets/documentation/putApi.png)
 ## 4. TODO
 ### Performance testing
+It is always recommended to do performance testing in order to estimate the limits of the system. It will also help us identify performance bottlenecks if any and address them effectively.
 ### CI/CD pipeline
+The application basically has all the tools built in to implement a CICP pipeline. Such an implementation would :
+- Run the [Unit test suite](#22-unit-test-suite)
+- If success, use [Gradle](#11-using-gradle) to build JAR
+- Create a [Docker image](#12-using-docker) with the newly built JAR. Tag the image with a new version
+- Deploy the latest version of the application to [Kubernetes](#13-using-kubernetes)
 ### Robust API security
+Have a more robust security mechanism for clients trying to publish data to our API. Protocols such as OAuth can be used to provide a more extensible solution
+### Fine tune kubernetes resource requests/limits
+The Goal of Kubernetes is to efficiently use resources and not under utilize them. Having taken a conservative approach in providing a 1CPU ~4GB machine to run the application in kubernetes initially, we need to tune the requests based on average load over a period of time. This way we can ensure the cluster is sized sufficiently to satisfy average load and whenever there is a peak, it can horizontally scale up for a brief amount of time. 
