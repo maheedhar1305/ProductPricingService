@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: product-config
 data:
-  MONGO_CONNECTION_URI: "mongodb://price:password@192.168.1.13:27017/pricing"
+  MONGO_CONNECTION_URI: "mongodb://user:password@localhost:27017/pricing"
   ADMIN_NAME: "admin"
   ADMIN_PWD: "adminPwd"

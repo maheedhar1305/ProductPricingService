@@ -49,7 +49,7 @@ $ docker pull maheeedhar1010/product-pricing-service:1.0.0
 2. Once the image has been downloaded to your machine, you can start the application in a Docker container using the command given below. We need to pass the `MONGO_CONNECTION_URI`, `ADMIN_NAME`, `ADMIN_PWD` arguments for the application as described in the [pre-requisites](#pre-requisites) section. The application will be started as a daemon.
 ```sh
 $ docker run -d -p 8080:8080 \
--e MONGO_CONNECTION_URI="mongodb://price:password@192.168.1.13:27017/pricing" \
+-e MONGO_CONNECTION_URI="mongodb://user:password@localhost:27017/pricing" \
 -e ADMIN_NAME="admin" \
 -e ADMIN_PWD="adminPwd"  \
 maheeedhar1010/product-pricing-serice:1.0.0
