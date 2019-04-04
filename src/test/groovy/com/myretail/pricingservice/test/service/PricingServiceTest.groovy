@@ -29,7 +29,7 @@ class PricingServiceTest extends Specification {
 	PriceRepository priceRepository = Mock(PriceRepository)
 	ProductServiceClient productServiceClient = Mock(ProductServiceClient)
 	
-	def "get pricing details for a valid product" ()
+	def "get_pricing_details_for_a_valid_product" ()
 	{
 		given : "a product in mongo and external repo"
 			productServiceClient.getProductInfo("abc") >>
@@ -49,7 +49,7 @@ class PricingServiceTest extends Specification {
 			result.current_price.currency_code == "USD"
 	}
 	
-	def "get pricing details for a product not available in inventory" ()
+	def "get_pricing_details_for_a_product_not_available_in_inventory" ()
 	{
 		given :
 			productServiceClient.getProductInfo("abc") >> { throw new NotFoundException() }
@@ -62,7 +62,7 @@ class PricingServiceTest extends Specification {
 			thrown EntityNotFoundException
 	}
 	
-	def "get pricing details for a product not available in mongo" ()
+	def "get_pricing_details_for_a_product_not_available_in_mongo" ()
 	{
 		given :
 			productServiceClient.getProductInfo("abc") >> new InventoryInfo()
@@ -75,7 +75,7 @@ class PricingServiceTest extends Specification {
 			thrown EntityNotFoundException
 	}
 	
-	def "server side error in the external api handled by service" ()
+	def "server_side_error_in_the_external_api_handled_by_service" ()
 	{
 		given :
 			productServiceClient.getProductInfo("abc") >> { throw new ExternalCommsException() }
@@ -88,7 +88,7 @@ class PricingServiceTest extends Specification {
 			thrown ExternalCommsException
 	}
 	
-	def "misc internal exception handled by service" ()
+	def "misc_internal_exception_handled_by_service" ()
 	{
 		given :
 			productServiceClient.getProductInfo("abc") >>  new InventoryInfo()
@@ -101,7 +101,7 @@ class PricingServiceTest extends Specification {
 			thrown InternalServiceException
 	}
 	
-	def "validation tests for the save price details method" () {
+	def "validation_tests_for_the_save_price_details_method" () {
 		given :
 			PricingService service = new PricingServiceImpl(productServiceClient : productServiceClient, priceRepository : priceRepository)
 		when :
@@ -128,7 +128,7 @@ class PricingServiceTest extends Specification {
 				current_price : new PricingInfo(value : -10.09, currency_code : "USD"))]        ||         [ "Price must be greater than zero" ]
 	}
 	
-	def "save price details of a known product" () {
+	def "save_price_details_of_a_known_product" () {
 		given :
 			priceRepository.doesProductExists("hgf") >> true
 			PricingService service = new PricingServiceImpl(productServiceClient : productServiceClient, priceRepository : priceRepository)
@@ -139,7 +139,7 @@ class PricingServiceTest extends Specification {
 			1 * priceRepository.updatePriceInfo(_)
 	}
 	
-	def "save price details of an unknown product" () {
+	def "save_price_details_of_an_unknown_product" () {
 		given :
 			priceRepository.doesProductExists("hgf") >> false
 			PricingService service = new PricingServiceImpl(productServiceClient : productServiceClient, priceRepository : priceRepository)

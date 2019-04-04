@@ -40,7 +40,7 @@ class PriceDaoSpec extends Specification {
 		FlapDoodleHelper.cleanup()
 	}
 	
-	def 'update known product info'()
+	def 'update_known_product_info'()
 	{
 		given : "price data for a product"
 		    def price = new Price(productId : "345", currentPrice : 100.01, lastModified : new Date(), currencyCode : "USD") 
@@ -56,7 +56,7 @@ class PriceDaoSpec extends Specification {
 			result.currentPrice == 101.01
 	}
 	
-	def 'test exists method'()
+	def 'test_exists_method'()
 	{
 		when:
 			def result = priceDao.doesProductExists(input[0])

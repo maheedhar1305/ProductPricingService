@@ -19,7 +19,7 @@ metadata:
   labels:
     name: product-pricing
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       name: product-pricing-deployment
@@ -64,7 +64,7 @@ metadata:
   labels:
     name: product-pricing
 spec:
-  minReplicas: 2
+  minReplicas: 3
   maxReplicas: 5
   metrics:
   - type: Resource
