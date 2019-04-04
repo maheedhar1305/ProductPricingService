@@ -121,7 +121,8 @@ This application uses the following frameworks for unit testing
 
 ### 2.3 Meaningful API error messages
 
-It is important that when there is a failure in the application, we communicate the reason for failure in such a manner that clients can use to troubleshoot and fix the issues on their end. To this effect, the application has a robust and extendable error handling mechanism in place which will handle any failures in the application and accurately convey the reason for failure to the client. 
+- It is important that when there is a failure in the application, we communicate the reason for failure in such a manner that clients can use to troubleshoot and fix the issues on their end. To this effect, the application has a robust and extendable error handling mechanism in place which will handle any failures in the application and accurately convey the reason for failure to the client. 
+- Also,  HTTP Error codes are used to depict the nature of the failures
 
 Here are a few examples :
 
@@ -129,13 +130,25 @@ When the PUT method fails due to some validation error, the Error message accura
 :-------------------------:|:-------------------------:
 ![example-1](/extras/assets/documentation/putError.png)  |  ![example-2](/extras/assets/documentation/getError.png)
 
-
-
 ### 2.4 Mongo index
+
+Creating indices in mongo helps with the performance of the application as mongo queries have faster response times when the queried fields are indexed. In our case, we use `@Indexed(unique=true)` annotation , in the [Price](https://github.com/maheedhar1305/ProductPricingService/blob/develop/src/main/java/com/myretail/pricingservice/domain/Price.java) domain object, to ensure whenever the application connects to a mongo instance, it automatically creates an index.
+
+The index is created for the `productId` field and its declared as unique. This way we ensure duplicate records are not created and as well as improve query response times.
+
+![mongoIndex.png](/extras/assets/documentation/mongoIndex.png) 
+
 ### 2.5 Secure API
+
+Since the application maintains a database that multiple client applications consume, we need to restrict the clients who want to publish information. We acheive this in our application by creating a set of credentials which need to be used by any client that wants to publish information to our API. Any unauthorized requests would fail
+
+Unauthorized requests fail with a HTTP 401 status  |  Authorized requests update the database
+:-------------------------:|:-------------------------:
+![unauth](/extras/assets/documentation/unauth.png)  |  ![auth](/extras/assets/documentation/auth.png)
 
 ## 3. API Specification
 
-## TO-DO
+## 4. TODO
 ### Performance testing
 ### CI/CD pipeline
+### Robust API security
