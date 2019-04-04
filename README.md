@@ -6,10 +6,10 @@ Please refer to the [API documentation](#3-api-specification) for detailed speci
 
 ## 1. Quickstart
 
- Here is how you can quickly get started on working with the app. You can :
+ There are 3 *options* to quickly access and use the application. They are :
   - Download the source code and build the binary (Using **Gradle**)
-  - Download a publicly available Docker hub image and simply run it (Using **Docker**)
-  - Use the Kubernetes script to deploy the image to a cluster (Using a **Kubernetes** solution of your choice, example : Google Kubernetes Engine)
+  - Download and run, a publicly available Docker image (Using **Docker**)
+  - Use the Kubernetes script to deploy the application to a cluster (Using a **Kubernetes** solution of your choice, example : Google Kubernetes Engine)
 
 ### 1.0 Pre-requisites
 
@@ -31,7 +31,7 @@ $ export MONGO_CONNECTION_URI="mongodb://user:password@localhost:27017/pricing"
 $ export ADMIN_NAME="admin"
 $ export ADMIN_PWD="adminPwd"
 ```
-6. Start the application and use the [Healthcheck API](#Healthcheck-API) to verify that the application is up.
+6. Start the application and use the [Healthcheck API](#20-healthcheck-api) to verify that the application is up.
 ```sh
 $ java -jar build/libs/ProductPricingService.jar
 ```
@@ -56,12 +56,12 @@ maheeedhar1010/product-pricing-serice:1.0.0
 
 The Kubernetes option is the most **Prodution-Ready** option of all the 3 options mentioned, as it comes with many enterprise standard features such as **Horizontal scaling**, **high availability** etc;. Please refer to this [section](#21-kubernetes) for a more deeper dive into the features of Kubernetes, that I have leveraged for this application.
 
-1. Edit the [product-config.yaml](https://github.com/maheedhar1305/ProductPricingService/blob/develop/product-config.yaml) file to configure the parameters mentioned in the [pre-requisites](#10-pre-requisites) section.
+1. Edit the [product-config.yaml](/product-config.yaml) file to configure the parameters mentioned in the [pre-requisites](#10-pre-requisites) section.
 2. Deploy the configuration to a kubernetes cluster
 ```sh
 $ kubectl create -f product-config.yaml
 ```
-3. Deploy the application to the kubernetes cluster using the kubernetes descriptor [product-pricing-service.yaml](https://github.com/maheedhar1305/ProductPricingService/blob/develop/product-pricing-service.yaml) file. 
+3. Deploy the application to the kubernetes cluster using the kubernetes descriptor [product-pricing-service.yaml](/product-pricing-service.yaml) file. 
 ```sh
 $ kubectl create -f product-pricing-service.yaml
 ```
@@ -89,7 +89,7 @@ Please refer to the [API documentation](#3-api-specification) for more detailed 
 
 ### 2.1 Kubernetes
 
-Here are some brief pointers about the resources defined in the application's [kubernetes descriptor file](https://github.com/maheedhar1305/ProductPricingService/blob/develop/product-pricing-service.yaml), and the significance of their role in a production environment
+Here are some brief pointers about the resources defined in the application's [kubernetes descriptor file](/product-pricing-service.yaml), and the significance of their role in a production environment
 
 **Deployment** 
 - The Application runs inside a kubernetes deployment named "product-service-deployment". The Deployment will be a cluster of 3 pods servicing the Traffic.
@@ -132,7 +132,7 @@ When the PUT method fails due to some validation error, the Error message accura
 
 ### 2.4 Mongo index
 
-Creating indices in mongo helps with the performance of the application as mongo queries have faster response times when the queried fields are indexed. In our case, we use `@Indexed(unique=true)` annotation , in the [Price](https://github.com/maheedhar1305/ProductPricingService/blob/develop/src/main/java/com/myretail/pricingservice/domain/Price.java) domain object, to ensure whenever the application connects to a mongo instance, it automatically creates an index.
+Creating indices in mongo helps with the performance of the application as mongo queries have faster response times when the queried fields are indexed. In our case, we use `@Indexed(unique=true)` annotation , in the [Price](/src/main/java/com/myretail/pricingservice/domain/Price.java) domain object, to ensure whenever the application connects to a mongo instance, it automatically creates an index.
 
 The index is created for the `productId` field and its declared as unique. This way we ensure duplicate records are not created and as well as improve query response times.
 
@@ -147,6 +147,8 @@ Unauthorized requests fail with a HTTP 401 status  |  Authorized requests update
 ![noauth](/extras/assets/documentation/noauth.png)  |  ![auth](/extras/assets/documentation/auth.png)
 
 ## 3. API Specification
+
+The application uses OpenAPI 3.0 Specification to describe its API. [Reference](/openapi.yaml)
 
 GET   |  PUT
 :-------------------------:|:-------------------------:
