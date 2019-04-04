@@ -40,7 +40,7 @@ $ java -jar build/libs/ProductPricingService.jar
 
 ### 1.2 Using Docker
 
-Steps to run using Docker:x
+Steps to run using Docker:
 
 1. A Docker image has been created for the latest stable version of the application. This *publicly available* image can be found [here](https://cloud.docker.com/u/maheeedhar1010/repository/docker/maheeedhar1010/product-pricing-service). You can use docker to pull the image to your environment.
 ```sh
@@ -155,7 +155,8 @@ Unauthorized requests fail with a HTTP 401 status  |  Authorized requests update
 ## 3. API Specification
 
 The application uses OpenAPI 3.0 Specification to describe its API. [Reference](/openapi.yaml)
-**NOTE** The application runs on the base context path `pricing` . Sample URL `/pricing/v1/products/{id}`.
+
+**NOTE** The application runs on the base context path `/pricing` . Sample URL `/pricing/v1/products/{id}`.
 
 GET   |  PUT
 :-------------------------:|:-------------------------:
