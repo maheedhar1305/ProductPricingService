@@ -52,7 +52,12 @@ public class PricingServiceImpl implements PricingService {
 	public ProductPricingInfo getPriceInfoForProduct(String productId)
 			throws EntityNotFoundException,ExternalCommsException,InternalServiceException
 	{
-		try {
+		try 
+		{	
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("getPriceInfoForProduct for id :" + productId);
+			}
+			
 			InventoryInfo info = productServiceClient.getProductInfo(productId);
 			Price price = priceRepository.findByProductId(productId);
 			
@@ -72,6 +77,10 @@ public class PricingServiceImpl implements PricingService {
 			current_price.setCurrency_code(price.getCurrencyCode());
 			current_price.setValue(price.getCurrentPrice());
 			result.setCurrent_price(current_price);
+			
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Result for getPriceInfoForProduct for id :" + productId + " is " + result);
+			}
 			
 			return result;
 		}
@@ -100,7 +109,12 @@ public class PricingServiceImpl implements PricingService {
 	public void savePriceForProduct(String productId, ProductPricingInfo info)
 			throws InternalServiceException, InvalidDataException
 	{
-		try {
+		try 
+		{	
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("savePriceForProduct for id :" + productId + " request body : " + info);
+			}
+			
 			validate(productId, info);
 			
 			Price price = new Price();
