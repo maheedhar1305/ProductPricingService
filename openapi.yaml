@@ -1,0 +1,96 @@
+openapi: 3.0.1
+info:
+  title: Product Pricing Service
+  description: Service for publishing and consuming price and product information
+  version: 1.0.0
+paths:
+  /v1/products/{id}:
+    get:
+      description: Returns the product and price information
+      operationId: getPriceInfo
+      parameters:
+      - name: id
+        in: path
+        description: ID of the product whose information needs to be retreived
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Price info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPricingInfo'
+        404:
+          description: Product not found
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/ApiError'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/ApiError'
+    put:
+      description: Publish price information for a product
+      operationId: publishPriceInfo
+      parameters:
+      - name: id
+        in: path
+        description: ID of the product whose information needs to be retreived
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Price information that needs to be added/updated to the database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductPricingInfo'
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad request
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/ApiError'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/ApiError'
+components:
+  schemas:
+    ProductPricingInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        current_price:
+          $ref: '#/components/schemas/PricingInfo'
+    PricingInfo:
+      type: object
+      properties:
+        value:
+          type: number
+        currency_code:
+          type: string
+    ApiError:
+      type: object
+      properties:
+        status:
+          type: string
+        timestamp:
+          type: string
+        message:
+          type: string
+        debugMessage:
+          type: string  
