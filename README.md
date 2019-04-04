@@ -144,10 +144,13 @@ Since the application maintains a database that multiple client applications con
 
 Unauthorized requests fail with a HTTP 401 status  |  Authorized requests update the database
 :-------------------------:|:-------------------------:
-![unauth](/extras/assets/documentation/noauth.png)  |  ![auth](/extras/assets/documentation/auth.png)
+![unauth](/extras/assets/documentation/unauth.png)  |  ![auth](/extras/assets/documentation/auth.png)
 
 ## 3. API Specification
 
+GET   |  PUT
+:-------------------------:|:-------------------------:
+![unauth](/extras/assets/documentation/getApi.png)  |  ![auth](/extras/assets/documentation/putApi.png)
 ## 4. TODO
 ### Performance testing
 ### CI/CD pipeline
