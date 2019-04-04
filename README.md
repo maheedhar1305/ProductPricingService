@@ -7,9 +7,9 @@ Please refer to the [API documentation](#3-api-specification) for detailed speci
 ## 1. Quickstart
 
  Here is how you can quickly get started on working with the app. You can :
-  - Download the source code and build the binary (Using gradle)
-  - Download a publicly available Docker hub image and simply run it (Using Docker)
-  - Use the Kubernetes script to deploy the image to a cluster (Using a Kubernetes solution of your choice, example : Google Kubernetes Engine)
+  - Download the source code and build the binary (Using **Gradle**)
+  - Download a publicly available Docker hub image and simply run it (Using **Docker**)
+  - Use the Kubernetes script to deploy the image to a cluster (Using a **Kubernetes** solution of your choice, example : Google Kubernetes Engine)
 
 ### 1.0 Pre-requisites
 
@@ -125,10 +125,11 @@ It is important that when there is a failure in the application, we communicate 
 
 Here are a few examples :
 
-- When the PUT method fails due to some validation error, the Error message accurately conveys the list of validation errors for the client to fix. *(left)*
-- When the GET method failed to fetch an entity, it describes what is missing. *(right)*
+When the PUT method fails due to some validation error, the Error message accurately conveys the list of validation errors for the client to fix.           |  When the GET method failed to fetch an entity, it describes what is missing.
+:-------------------------:|:-------------------------:
+![example-1](/extras/assets/documentation/putError.png)  |  ![example-2](/extras/assets/documentation/getError.png)
 
-![example-1](/extras/assets/documentation/putError.png) ![example-2](/extras/assets/documentation/getError.png)
+
 
 ### 2.4 Mongo index
 ### 2.5 Secure API
