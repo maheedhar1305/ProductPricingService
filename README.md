@@ -144,7 +144,7 @@ Since the application maintains a database that multiple client applications con
 
 Unauthorized requests fail with a HTTP 401 status  |  Authorized requests update the database
 :-------------------------:|:-------------------------:
-![unauth](/extras/assets/documentation/unauth.png)  |  ![auth](/extras/assets/documentation/auth.png)
+![noauth](/extras/assets/documentation/noauth.png)  |  ![auth](/extras/assets/documentation/auth.png)
 
 ## 3. API Specification
 
